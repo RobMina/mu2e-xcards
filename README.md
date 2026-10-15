@@ -26,8 +26,18 @@ Start from the matching template in `discovery-local/templates/` (or use its `xc
 scratch. Then:
 
 ```bash
-scripts/check.sh cards/agents/mu2e-kb-mcp.md   # template-diff check + registry validation if a stack is up
+conda env create -f environment.yml            # once (or: pip install -r requirements.txt into any venv)
+conda activate mu2e-xcards
+python scripts/validate.py                     # every card; or name files; --strict fails on warnings too
+scripts/check.sh cards/agents/mu2e-kb-mcp.md   # validate.py + discovery-local's template-diff check
 ```
+
+`validate.py` checks a card offline exactly as the registry does (front matter parsing, Draft 2020-12 validation
+against `schema/xcard.schema.json`, the registry's own copy of the Genesis spine schema), plus Mu2e conventions as
+warnings. A secret or non-public path is always an error. It agrees with the registry on the
+bundled Discovery Engine corpus (the same 2 of 330 cards rejected; the 5 framework and workflow cards the registry never saw are flagged too).
+It does not run the registry's LinkML check of data card v2 content, so register data cards against a local stack
+before publishing. GitHub Actions runs it on every push.
 
 Conventions for Mu2e cards:
 

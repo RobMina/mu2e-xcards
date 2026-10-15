@@ -1,0 +1,428 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gitlab.osti.gov/genesis/discovery-engine/xcard.schema.json",
+  "title": "xCard",
+  "description": "Common spine + per-type extension, discriminated by xCard.type. Validates model, agent, and data cards against one schema \u2014 programmatically, no human.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "xCard",
+    "id",
+    "name",
+    "description",
+    "last_updated"
+  ],
+  "properties": {
+    "xCard": {
+      "type": "object",
+      "required": [
+        "card_type",
+        "version"
+      ],
+      "properties": {
+        "card_type": {
+          "enum": [
+            "agent",
+            "data",
+            "model",
+            "framework",
+            "tool",
+            "workflow",
+            "eval",
+            "infrastructure",
+            "experiment",
+            "dataset"
+          ],
+          "$comment": "Two tiers. CORE (agent, data, model) are extension-bearing and standardized \u2014 these are what the data-card v2 discriminator uses, and their extension shape is validated below. EXTENDED (framework, tool, workflow, eval, infrastructure, experiment) are valid SPINE-ONLY cards whose dedicated extension is deferred; a card of an extended type validates against the spine only. An extended type is promoted to core when the working group defines its extension. This tiering does not affect data cards, which are always type=data (core). \"dataset\" is accepted as an alias of \"data\" so cards written against Genesis data card v2.0.0, which fixes card_type to \"dataset\", validate here."
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "science": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sensitivity": {
+      "enum": [
+        "unreviewed",
+        "general",
+        "reviewed",
+        "restricted"
+      ]
+    },
+    "developed_by": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "provider": {
+      "type": "object",
+      "properties": {
+        "organization": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "version": {
+      "type": "string"
+    },
+    "license": {
+      "type": "object",
+      "properties": {
+        "spdx_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date"
+    },
+    "persistent_id": {
+      "type": "string"
+    },
+    "governance": {
+      "type": "object",
+      "properties": {
+        "export_control_status": {
+          "enum": [
+            "Yes",
+            "No",
+            "Pending_Review",
+            "Unknown",
+            ""
+          ]
+        },
+        "privacy_pii": {
+          "enum": [
+            "Yes",
+            "No",
+            "Pending_Review",
+            "Unknown",
+            ""
+          ]
+        },
+        "privacy_phi": {
+          "enum": [
+            "Yes",
+            "No",
+            "Pending_Review",
+            "Unknown",
+            ""
+          ]
+        },
+        "review_provenance": {
+          "type": "array"
+        }
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "description": "Typed, resolvable relationships \u2014 the knowledge-graph web.",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "target"
+        ],
+        "properties": {
+          "type": {
+            "enum": [
+              "requires",
+              "uses_dataset",
+              "derived_from",
+              "based_on",
+              "part_of",
+              "has_part",
+              "produces",
+              "runs_on",
+              "compatible_with",
+              "validated_by",
+              "references",
+              "supersedes",
+              "superseded_by",
+              "invokes",
+              "orchestrates"
+            ]
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1,
+            "description": "resolvable id / DOI / URI of the target"
+          },
+          "target_label": {
+            "type": "string",
+            "description": "human-readable label for the target"
+          },
+          "inverse": {
+            "type": "string",
+            "description": "asserted inverse-direction relationship, if any"
+          }
+        }
+      }
+    },
+    "io_contract": {
+      "type": "object",
+      "properties": {
+        "input_modes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "output_modes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "modalities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "task_tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dataset_role": {
+          "enum": [
+            "intermediate",
+            "final",
+            ""
+          ]
+        }
+      }
+    },
+    "extension": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "$comment": "Model cards: extension is a ModelExtension.",
+      "if": {
+        "properties": {
+          "xCard": {
+            "properties": {
+              "card_type": {
+                "const": "model"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "science",
+          "developed_by"
+        ],
+        "properties": {
+          "extension": {
+            "type": "object",
+            "properties": {
+              "metrics": {
+                "type": "array"
+              },
+              "base_model": {
+                "type": "string"
+              },
+              "training_datasets": {
+                "type": "array"
+              },
+              "architecture": {
+                "type": "string"
+              },
+              "framework": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Agent cards: extension is an AgentExtension.",
+      "if": {
+        "properties": {
+          "xCard": {
+            "properties": {
+              "card_type": {
+                "const": "agent"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "science",
+          "developed_by"
+        ],
+        "properties": {
+          "extension": {
+            "type": "object",
+            "properties": {
+              "skills": {
+                "type": "array"
+              },
+              "capabilities": {
+                "type": "object"
+              },
+              "protocol_version": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Data cards: output-only (input_modes must be empty), and a DataCardExtension.",
+      "if": {
+        "properties": {
+          "xCard": {
+            "properties": {
+              "card_type": {
+                "enum": [
+                  "data",
+                  "dataset"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "science",
+          "developed_by"
+        ],
+        "properties": {
+          "io_contract": {
+            "properties": {
+              "input_modes": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          },
+          "extension": {
+            "type": "object",
+            "properties": {
+              "formats": {
+                "type": "array"
+              },
+              "schema_fields": {
+                "type": "array"
+              },
+              "export_control_status": {
+                "type": "string"
+              },
+              "privacy_pii": {
+                "type": "string"
+              },
+              "privacy_phi": {
+                "type": "string"
+              },
+              "ai_usage": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Infrastructure cards (IRI / ESnet, proof-of-concept core): an InfrastructureExtension.",
+      "if": {
+        "properties": {
+          "xCard": {
+            "properties": {
+              "card_type": {
+                "const": "infrastructure"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "extension": {
+            "type": "object",
+            "properties": {
+              "resource_class": {
+                "enum": [
+                  "compute",
+                  "network",
+                  "storage",
+                  "instrument",
+                  "service",
+                  ""
+                ]
+              },
+              "iri_urn": {
+                "type": "string"
+              },
+              "facility": {
+                "type": "string"
+              },
+              "capabilities": {
+                "type": "array"
+              },
+              "configuration": {
+                "type": "object"
+              },
+              "quantitative_values": {
+                "type": "object"
+              },
+              "access_protocol": {
+                "type": "string"
+              },
+              "state_uri": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
