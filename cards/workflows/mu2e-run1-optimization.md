@@ -29,8 +29,10 @@ description: |-
      leaderboard row; inputs and outputs can be located with card mu2e-metacat-mcp.
   5. The surrogate refits on the leaderboard and suggests the next points; the agent explores across qualitatively
      different configurations and handles failed jobs.
-  6. Results, traces and lessons are written to memory and reported to the collaboration, cards mu2e-memory-mcp
-     and mu2e-kb-mcp; literature context from cards mu2e-inspirehep-mcp and mu2e-arxiv-mcp.
+  6. Results, traces and lessons are written to memory and reported to the collaboration: the reporting agent (card
+     mu2e-mu2ebo-reporter) writes a number-checked report at every loop exit and on request mid-campaign, with
+     DocDB context, and can store it in memory (cards mu2e-memory-mcp, mu2e-kb-mcp); literature context from cards
+     mu2e-inspirehep-mcp and mu2e-arxiv-mcp.
 
   Inputs: a study definition (parameters, geometry, simulation and analysis steps, objectives); Mu2e Offline and
   simulation software on CVMFS; grid or HPC allocations. Outputs: leaderboards of evaluated configurations with
@@ -53,13 +55,14 @@ keywords:
   - stopping target
   - sensitivity
   - figure of merit
+  - campaign report
   - run-1
   - genesis mission
   - high energy physics
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.0.0'
+version: '1.1.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: Apache-2.0
@@ -104,6 +107,9 @@ relationships:
   - type: has_part
     target: mu2e-analysis-mcp
     target_label: Mu2e Analysis MCP Server
+  - type: has_part
+    target: mu2e-mu2ebo-reporter
+    target_label: Mu2eBO campaign reporting agent
   - type: based_on
     target: HEP-KE-Agent-xcard
     target_label: HEP-KE-Agent (AmSC IDA Pilot Knowledge Extraction)

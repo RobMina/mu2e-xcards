@@ -46,7 +46,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.0.0'
+version: '1.1.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: NOASSERTION
@@ -62,6 +62,9 @@ relationships:
   - type: runs_on
     target: mu2e-fermigrid
     target_label: FermiGrid for Mu2e
+  - type: invokes
+    target: mu2e-mu2ebo-reporter
+    target_label: Mu2eBO campaign reporting agent (report at loop exit and on request)
   - type: part_of
     target: mu2e-run1-optimization
     target_label: Mu2e Agentic Run-1 Experiment Optimization Workflow
@@ -88,6 +91,7 @@ extension:
     - Dry-run, then with operator approval launch, a closed-loop Bayesian-optimization campaign (start_campaign)
     - Follow and stop campaigns (campaign_status, stop_campaign)
     - Read a study's leaderboard, best configurations first (leaderboard)
+    - Report on a campaign automatically at loop exit, and on request mid-campaign (start_report, report)
     - Run fast Geant4 simulation chains on the Fermilab grid or locally, and G4beamline beamline jobs
     - Optimize stopping-target and production-target geometry for muon-to-electron conversion sensitivity
   capabilities:
@@ -129,6 +133,7 @@ repository for review by its authors.
 | `start_campaign` | Dry run by default (launch checks, exact command, job budget); launches only with `confirm=true` after the operator's OK |
 | `campaign_status`, `stop_campaign` | Follow a campaign; stop launching new evaluations (running ones finish) |
 | `leaderboard` | A study's evaluated configurations, best first |
+| `start_report`, `report` | Ask the reporting agent (card `mu2e-mu2ebo-reporter`) for an interim campaign report and read it; a final report is started automatically at every loop exit |
 
 The study tools submit no jobs and write no leaderboard rows; only campaigns do.
 
