@@ -53,11 +53,13 @@ Conventions for Mu2e cards:
 
 ## Registering
 
-Registering is a deliberate act (a second registration of the same file creates a second card). With a local stack
-running:
+Registering is a deliberate act. A second POST of the same file creates a second card, so use `scripts/registry.sh`,
+which validates, then creates the card once and replaces it (new version, same registry id) on later pushes, and
+resyncs the engine:
 
 ```bash
-<discovery-local>/register_card.sh cards/agents/mu2e-kb-mcp.md
+scripts/registry.sh push cards/agents/mu2e-kb-mcp.md   # REGISTRY_URL / ENGINE_URL default to the local stack
+scripts/registry.sh ids                                # local card id -> registry id map (untracked)
 ```
 
 ## License
