@@ -47,7 +47,10 @@ Conventions for Mu2e cards:
 - `io_contract` MIME types: `application/x-root` (any ROOT file), `application/vnd.mu2e.art+root`,
   `application/vnd.mu2e.eventntuple+root`, `application/vnd.mu2e.dqm-metrics+json`, `application/x-fhicl`,
   `text/markdown` (reports). List the generic type next to a `vnd.mu2e` one wherever outside tools can read the file.
-- Relationships come only from `datasets:`, `base_model:` and `new_version:`, naming existing card ids.
+- Relationships: typed entries in `relationships:` (`type` one of the schema's enum, e.g. `has_part`, `based_on`,
+  `runs_on`, `requires`; `target` an existing card id) do create graph edges for spine cards (verified 2026-10-15;
+  the discovery-local templates say otherwise, which holds only for legacy non-spine cards). `datasets:`,
+  `base_model:` and `new_version:` also work. Workflow cards list their component cards with `has_part`.
 - No secrets, tokens, internal hostnames with credentials, or non-public data locations in a card: this
   repository is public.
 
@@ -61,6 +64,11 @@ resyncs the engine:
 scripts/registry.sh push cards/agents/mu2e-kb-mcp.md   # REGISTRY_URL / ENGINE_URL default to the local stack
 scripts/registry.sh ids                                # local card id -> registry id map (untracked)
 ```
+
+Workflow cards have no registry subtype; `registry.sh push` writes them to the registry's storage with `docker exec`
+into the local engine container, using the same fixed key the engine's own "save workflow" uses, so a re-push
+replaces the card. Registry `DELETE` is a soft delete that the engine does not see; remove a card from storage and
+restart the `api` container to drop it from search.
 
 ## License
 
