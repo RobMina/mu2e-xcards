@@ -32,10 +32,29 @@ print(v or "")
 PY
 }
 
+# Workflow cards have no registry subtype. Write them to the registry's storage the way the engine's own
+# "save workflow" does (card_builder.py): a fixed key derived from the card id, so a re-push replaces it.
+push_workflow() {
+  local card="$1" cid="$2" ctr="${API_CONTAINER:-genesis-local-api-1}" dk
+  dk="$(command -v docker || echo "$HOME/.docker/bin/docker")"
+  [[ -x "$dk" ]] || { echo "$card: workflow cards need docker exec into the api container" >&2; return 1; }
+  "$dk" exec -i -e CARD_ID="$cid" "$ctr" python -c '
+import os, sys, uuid
+from genesis.knowledge._registry_source import XCardRegistrySource
+ns = uuid.UUID("3f5c1d90-6b2a-4e77-9d14-2c8ab5e30f61")  # card_builder._WORKFLOW_NAMESPACE
+cid = os.environ["CARD_ID"]
+prefix = (os.environ.get("XCARD_STORAGE_PREFIX") or "registry").strip("/")
+key = f"{prefix}/resource_card/{uuid.uuid5(ns, cid)}/versions/1-{uuid.uuid5(ns, cid + chr(58) + chr(49))}.md"
+XCardRegistrySource()._put_sync(key, sys.stdin.read(), None)
+print(f"{cid} -> storage {key}")
+' < "$card"
+}
+
 push() {
   local card="$1" cid ctype sub media rid out code
   "$py" "$root/scripts/validate.py" "$card" >/dev/null || { "$py" "$root/scripts/validate.py" "$card"; return 1; }
   cid="$(field "$card" id)"; ctype="$(field "$card" type)"
+  if [[ "$ctype" == workflow ]]; then push_workflow "$card" "$cid"; return; fi
   read -r sub media < <(subtype_of "$ctype") || { echo "$card: card_type '$ctype' cannot be registered" >&2; return 1; }
   rid="$(awk -F'\t' -v k="$cid" '$1==k {print $2}' "$map" | tail -1)"
   if [[ -n "$rid" ]] && [[ "$(curl -s -o /dev/null -w '%{http_code}' "$reg/api/current/registry/$sub/$rid")" == 200 ]]; then
