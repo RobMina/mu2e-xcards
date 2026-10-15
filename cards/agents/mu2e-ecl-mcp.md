@@ -44,7 +44,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '0.6.1'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: Apache-2.0
@@ -85,23 +85,22 @@ A read-only Model Context Protocol (MCP) server over the Mu2e instance of the Fe
 Logbook (ECL). Any MCP client (Claude Code, Codex, goose, or the Mu2e agentic DQM workflow) can use it to search and
 read logbook entries. Software: `mcp/ecl` in [Mu2e/aitools](https://github.com/Mu2e/aitools) (Apache-2.0), reusing
 the ECL protocol code of [Mu2e/ecl-api](https://github.com/Mu2e/ecl-api) (MIT). This card describes the deployment
-that serves the Mu2e collaboration, version 0.6.1 as of 2026-10-15.
+that serves the Mu2e collaboration.
 
 ## What it does
 
 | Tool | Purpose |
 |---|---|
-| `ecl_search_entries` | Entries matching category, tag, form, author, time window (`after`/`before`, e.g. `3days`), indexed words or a substring; returns author, subject, category, timestamp, tags, text and form fields |
+| `ecl_search_entries` | Entries matching category, tag, form, author, time window (`after`/`before`, relative or absolute), indexed words or a substring; returns author, subject, category, timestamp, tags, text and form fields |
 | `ecl_search_entry_ids` | Same filters, ids only, for counting and paging |
 | `ecl_get_entry` | One entry in full |
 | `ecl_list_categories`, `ecl_list_tags`, `ecl_list_forms` | The logbook's vocabulary, for building filters |
 | `get_server_info` | Version, read-only state and auth mode |
 
-## Content (2026-10-15)
+## Content
 
-23 categories, including Shift, Runlog, Global Run, CRV, Calorimeter, Extinction Monitor, Muon beamline, the
-Cryogenics, Controls, ODH and Vacuum subcategories, Facilities, Planning and Safety. About 50 entries were made in
-the preceding week.
+The Mu2e logbook categories, for example Shift, Runlog, Global Run, CRV, Calorimeter, Extinction Monitor, Muon
+beamline, Cryogenics and controls, Facilities, Planning and Safety; `ecl_list_categories` gives the current list.
 
 ## How to use it
 

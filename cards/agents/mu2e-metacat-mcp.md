@@ -44,7 +44,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '0.7.4'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: Apache-2.0
@@ -85,7 +85,7 @@ A read-only Model Context Protocol (MCP) server over Mu2e's MetaCat file catalog
 API, with file-location translation from Mu2e's data-handling package (mdh). Any MCP client (Claude Code, Codex,
 goose, or the Mu2e agentic workflows) can use it to find data. Software: `mcp/metacat` in
 [Mu2e/aitools](https://github.com/Mu2e/aitools) (Apache-2.0). This card describes the deployment that serves the
-Mu2e collaboration, version 0.7.4 as of 2026-10-15.
+Mu2e collaboration.
 
 ## What it does
 
@@ -103,16 +103,16 @@ replica over tape.
 Mu2e dataset names follow `data_tier.owner.description.configuration.file_format` (for example `raw`, `sim`, `dig`,
 `mcs`, `nts` tiers); a file name adds a sequencer field.
 
-## Content (2026-10-15)
+## Content
 
-8,521 datasets in the collaboration (`mu2e`) namespace, from raw cosmic-ray detector data to simulation and
-EventNtuple production, plus user namespaces.
+The collaboration (`mu2e`) namespace, from raw detector data to simulation and EventNtuple production, plus user
+namespaces.
 
 ## How to use it
 
 - Transport: MCP streamable HTTP, listed in the Mu2e MCP registry on the Mu2e AI node at Fermilab.
 - Access: collaboration-internal. It is reachable only from the Fermilab network (on site, VPN or an SSH tunnel);
-  outside traffic is blocked by the lab firewall. No per-user key is needed today. Reading the files it points to
+  outside traffic is blocked by the lab firewall. No per-user key is needed. Reading the files it points to
   needs the usual Fermilab data-access credentials.
 - Read-only: no tool creates, changes or declares datasets or files.
 

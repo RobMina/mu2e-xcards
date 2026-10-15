@@ -45,7 +45,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '0.7.2'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: Apache-2.0
@@ -86,27 +86,25 @@ extension:
 A read-only Model Context Protocol (MCP) server over the Mu2e run database, built on Mu2e Offline's `runTool`.
 Any MCP client (Claude Code, Codex, goose, or the Mu2e agentic DQM workflow) can use it to answer questions about
 runs. Software: `mcp/runs` in [Mu2e/aitools](https://github.com/Mu2e/aitools) (Apache-2.0). This card describes the
-deployment that serves the Mu2e collaboration, version 0.7.2 as of 2026-10-15.
+deployment that serves the Mu2e collaboration.
 
 ## What it does
 
 | Tool | Purpose |
 |---|---|
 | `get_run` | One run by number, optionally with configurations, transitions and subruns |
-| `list_runs` | Recent runs, filtered by run range, run-type ids, time range or the last N days; most recent first, capped at 200 rows |
+| `list_runs` | Recent runs, filtered by run range, run-type ids, time range or the last N days; most recent first, with a server-side row cap |
 | `get_flags` | Run-type and transition-type id-to-name maps |
-| `get_config_blob` | A subsystem's run configuration: by default only its size and top-level keys; with a query, only the matching key paths and values (at most 100) |
+| `get_config_blob` | A subsystem's run configuration: by default only its size and top-level keys; with a query, only the matching key paths and values (capped) |
 | `get_dbtables`, `get_cidtables` | The conditions-database tables attached to one run, mainly for debugging |
 | `get_server_info` | Version and configuration |
 
-Configuration blobs can be hundreds of kilobytes, so the server never returns one whole; it summarises or searches
-instead.
+Configuration blobs can be large, so the server never returns one whole; it summarises or searches instead.
 
-## Content (2026-10-15)
+## Content
 
-Run types defined: mu2e, cosmics, cosmics_crv, cosmics_trk, cosmics_calo, cosmics_stm, cosmics_debug, lowth_crv,
-study_crv and source_stm. The 200 most recent runs (125068-125267) are cosmic-ray, Cosmic Ray Veto, calorimeter and
-stopping target monitor runs and studies from detector commissioning.
+Runs of every type the experiment takes, for example cosmic-ray runs for each detector, source runs and studies;
+`get_flags` lists the run types currently defined.
 
 ## How to use it
 
@@ -124,6 +122,6 @@ anomaly; this server is that interface, next to the DQM metrics, logbook and doc
 
 ## Limitations
 
-- Listings are capped at 200 runs per call; narrow with a run range, type or time window.
-- `get_config_blob` is slow (about 1-2 s per call, uncached) and never returns a whole blob.
+- Listings are capped per call; narrow with a run range, type or time window.
+- `get_config_blob` makes an uncached database call each time and never returns a whole blob.
 - The deployment follows the current Offline development build of `runTool`, so output details can change.

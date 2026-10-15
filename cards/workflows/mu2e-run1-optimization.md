@@ -59,7 +59,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '0.1.0'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: Apache-2.0
@@ -120,18 +120,16 @@ follows the AmSC IDA Pilot Knowledge Extraction (HEP-KE) framework.
 
 ## Steps
 
-| # | Step | Component | Card | Status (2026-10-15) |
-|---|---|---|---|---|
-| 1 | State objective and constraints; read prior studies | agent; memory and knowledge-base MCP servers | `mu2e-memory-mcp`, `mu2e-kb-mcp` | servers in production |
-| 2 | Propose configurations | agent; Mu2eBO GP surrogate (botorch) | `mu2e-mu2ebo-surrogate`, `mu2e-mu2ebo` | prototyped |
-| 3 | Simulate | Mu2eBO campaign MCP and kits: Geant4 jobs via Mu2e production tools (grid or local), one-event geometry pre-check, G4beamline | `mu2e-mu2ebo` | prototyped; full-chain validation in progress |
-| 4 | Analyse and score | analysis interface (S/sqrt(B), radiation damage, stops/POT, energy deposition); file catalog | `mu2e-analysis-mcp`, `mu2e-metacat-mcp` | prototyped for fast simulation |
-| 5 | Refit and choose next points; handle failures | Mu2eBO surrogate MCP; agent | `mu2e-mu2ebo-surrogate` | prototyped |
-| 6 | Record, report, cite | memory and knowledge-base MCP servers; literature servers; reporting agent | `mu2e-memory-mcp`, `mu2e-kb-mcp`, `mu2e-inspirehep-mcp`, `mu2e-arxiv-mcp` | reporting agent planned |
+| # | Step | Component | Card |
+|---|---|---|---|
+| 1 | State objective and constraints; read prior studies | agent; memory and knowledge-base MCP servers | `mu2e-memory-mcp`, `mu2e-kb-mcp` |
+| 2 | Propose configurations | agent; Mu2eBO GP surrogate (botorch) | `mu2e-mu2ebo-surrogate`, `mu2e-mu2ebo` |
+| 3 | Simulate | Mu2eBO campaign MCP and kits: Geant4 jobs via Mu2e production tools (grid or local), one-event geometry pre-check, G4beamline | `mu2e-mu2ebo` |
+| 4 | Analyse and score | analysis interface (S/sqrt(B), radiation damage, stops/POT, energy deposition); file catalog | `mu2e-analysis-mcp`, `mu2e-metacat-mcp` |
+| 5 | Refit and choose next points; handle failures | Mu2eBO surrogate MCP; agent | `mu2e-mu2ebo-surrogate` |
+| 6 | Record, report, cite | memory and knowledge-base MCP servers; literature servers; reporting agent | `mu2e-memory-mcp`, `mu2e-kb-mcp`, `mu2e-inspirehep-mcp`, `mu2e-arxiv-mcp` |
 
-First result (September 2026, Mu2e-doc-58092): a Bayesian-optimization study of the Run-1A stopping target
-designed a 49-foil geometry with S/sqrt(B) 4.15 against 3.26 for the deployed design (+27 %) at the same radiation
-damage; the unconstrained best was 4.41 (+35 %). Full-simulation validation of that result is in progress.
+Results of the optimization studies are reported in Mu2e documents (for example Mu2e-doc-58092), not in this card.
 
 ## Inputs
 

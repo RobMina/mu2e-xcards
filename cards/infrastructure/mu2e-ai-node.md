@@ -36,7 +36,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '2026-10-15'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: NOASSERTION
@@ -78,13 +78,9 @@ extension:
     - Serves a registry of the hosted servers (URL, description, key requirement) as MCP, JSON and HTML
     - Authenticates internal servers with per-user Mu2e keys
     - Reads Fermilab services (DocDB, DQM database, run database, ECL, MetaCat) on the agents' behalf
-  quantitative_values:
-    hosted_mcp_servers: 8
-    cpu_cores: 4
-    memory_gib: 11
+  quantitative_values: {}
   access_protocol: 'MCP streamable HTTP on the Fermilab network; registry as an MCP tool and as plain HTTP JSON'
   configuration:
-    operating_system: AlmaLinux 9
     service_manager: systemd user services, one versioned release per server
 ---
 
@@ -121,7 +117,6 @@ for people). Each entry has the server URL, a description an agent can use to ch
 
 ## Constraints
 
-- A small virtual machine (4 cores, 11 GiB memory as of 2026-10-15) without GPUs: it hosts tools, not model
-  inference or training.
+- A small virtual machine without GPUs: it hosts tools, not model inference or training.
 - The servers are read-only except the memory server, which only appends.
 - Model inference for agents comes from elsewhere (AmSC Model Access Gateway, ALCF or lab endpoints).

@@ -14,7 +14,7 @@ Checks, in order:
   3. registrability: card_type is one of agent, model, data/dataset, infrastructure (workflow cards are valid but go
      through storage, not the registry);
   4. Mu2e conventions (warnings; errors with --strict): id prefix and file name, directory per card type, keywords
-     not all digits, last_updated an ISO date, sensitivity explicit, description long enough to be searchable, no template leftovers, no
+     not all digits, last_updated an ISO date, no stale counts or sizes, sensitivity explicit, description long enough to be searchable, no template leftovers, no
      secrets or non-public paths.
 Data cards with Genesis data card v2 content are additionally LinkML-validated by the registry; that stage is not
 reproduced here, so register data cards against a local stack before publishing.
@@ -49,6 +49,9 @@ SECRET_PATTERNS = {
     "non-public path": re.compile(r"/(exp|pnfs|nashome|cvmfs/mu2e\.opensciencegrid\.org/[^ ]*/users)/[A-Za-z0-9_./-]*"),
 }
 MIN_DESCRIPTION = 80  # below this the engine falls back to indexing the body
+# Style: cards carry no counts, sizes or performance figures that go stale (README, "Conventions").
+STALE_NUMBER = re.compile(r"(?<![\w./-])\d{1,3}(?:,\d{3})+(?![\w.])|(?<![\w./-])\d{3,}(?![\w./-])|\b\d+(?:\.\d+)?\s?(?:%|percent|GiB|GB|TB|MiB|kB|node-hours|CPU-hours|GPU-hours|cores|nodes)\b")
+STALE_SKIP = re.compile(r"Mu2e-doc-\d+|docdb-\d+|20\d\d-\d\d-\d\d|https?://\S+|\b(?:19|20)\d\d\b|for example[^.;]*")
 
 
 def parse_front_matter(text: str) -> tuple[dict | None, str | None]:
@@ -111,8 +114,12 @@ def conventions(card: Path, fm: dict, text: str) -> list[str]:
     if len(str(fm.get("description", "")).strip()) < MIN_DESCRIPTION:
         warn.append(f"description under {MIN_DESCRIPTION} characters; search reads name, description, keywords "
                     "and skills, not the body")
-    if ctype == "workflow":
-        warn.append("workflow cards cannot be registered; load them through storage (discovery-local README)")
+    for i, line in enumerate(text.splitlines(), 1):
+        if re.match(r"\s*(last_updated|version):", line):
+            continue
+        hits = [m.group(0).strip() for m in STALE_NUMBER.finditer(STALE_SKIP.sub(" ", line))]
+        if hits:
+            warn.append(f"line {i}: {', '.join(repr(h) for h in hits)} look like counts or sizes that go stale")
     for s in TEMPLATE_LEFTOVERS:
         if s in text:
             warn.append(f"template text left in the card: '{s}'")

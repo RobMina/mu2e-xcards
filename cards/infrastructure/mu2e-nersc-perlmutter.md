@@ -11,7 +11,7 @@ description: >-
   project m4599: CPU nodes run Mu2e simulation campaigns submitted from Fermilab
   through HEPCloud, with outputs transferred back to Fermilab storage
   automatically. Mu2e simulation code is deployed there and routinely run at
-  scale (about 0.8 million CPU-hours equivalent in a recent campaign). In the Mu2e
+  scale. In the Mu2e
   Genesis phase 1 project it is one of the HPC resources for the Run-1
   optimization workflow, running reduced-statistics simulation campaigns that
   agents launch to evaluate detector and beamline configurations, with full
@@ -36,7 +36,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '2026-10-15'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: NOASSERTION
@@ -56,9 +56,7 @@ extension:
     - Runs Mu2e Geant4 simulation production on Perlmutter CPU nodes
     - Receives jobs from Fermilab through HEPCloud; outputs return to Fermilab dCache automatically
     - Mu2e software from CVMFS
-  quantitative_values:
-    allocation_node_hours: 20000
-    mu2e_recent_campaign_cpu_hours_equivalent: 800000
+  quantitative_values: {}
   access_protocol: 'Mu2e production submission through Fermilab HEPCloud'
   configuration:
     nersc_project: m4599
@@ -71,11 +69,10 @@ How the Mu2e experiment uses Perlmutter at NERSC. The machine itself is describe
 
 ## Capabilities
 
-- Geant4 simulation production on Perlmutter CPU nodes under NERSC project m4599 (20,000 node-hours, as stated in
-  the Mu2e Genesis phase 1 proposal, Mu2e-doc-57514).
+- Geant4 simulation production on Perlmutter CPU nodes under NERSC project m4599, an existing allocation the Mu2e
+  Genesis phase 1 proposal relies on (Mu2e-doc-57514).
 - Jobs are routed from Fermilab through HEPCloud; outputs are transferred back to Fermilab dCache automatically.
-- Mu2e re-commissioned NERSC running in 2025 and simulation jobs now regularly use it (Mu2e analysis coordination,
-  Mu2e-doc-54868); a recent campaign used about 0.8 million CPU-hours equivalent there (Mu2e-doc-57514).
+- Mu2e simulation jobs run there routinely (Mu2e analysis coordination, Mu2e-doc-54868).
 
 ## Role in the Mu2e Genesis project
 
@@ -88,5 +85,5 @@ Through Mu2e simulation production and HEPCloud; individual collaborators do not
 
 ## Constraints
 
-- Allocation-limited (yearly NERSC allocation); figures here are from the 2026 proposal and change each year.
+- Allocation-limited: NERSC allocations are renewed yearly.
 - Batch latency is set by the NERSC queue, so it suits campaigns more than quick single jobs.

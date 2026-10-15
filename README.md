@@ -53,6 +53,12 @@ Conventions for Mu2e cards:
   `base_model:` and `new_version:` also work. Workflow cards list their component cards with `has_part`.
 - No secrets, tokens, internal hostnames with credentials, or non-public data locations in a card: this
   repository is public.
+- **No numbers that go stale.** Describe what a resource is, what it does and how to reach it, not its current size
+  or performance: no deployed version strings, document or dataset counts, run ranges, node or core counts,
+  allocation or CPU-hour figures, rate limits, timings, or physics results (cite the Mu2e document instead). Use the
+  tool that reports the live value (for example `list_sources`, `get_flags`) as the pointer. Fixed specifications,
+  such as the proposal's decision-gate targets, are fine. `validate.py` warns on likely counts and sizes. The spine
+  `version:` is the card's own revision (`1.0.0`), not the software's.
 
 ## Registering
 

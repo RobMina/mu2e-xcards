@@ -15,9 +15,8 @@ description: >-
   In the Mu2e Genesis phase 1 project it is where agent-launched analyses run
   (figures of merit for the Run-1 optimization workflow, data quality monitoring
   histograms) and where simulation outputs are stored, located through the Mu2e
-  MetaCat file catalog. A recent Mu2e production campaign used about 1.6 million
-  CPU-hours here. Access needs a Fermilab account, Mu2e membership and grid
-  credentials.
+  MetaCat file catalog. It runs Mu2e's large simulation production campaigns.
+  Access needs a Fermilab account, Mu2e membership and grid credentials.
 
 science:
   - particle-physics
@@ -39,7 +38,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '2026-10-15'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: NOASSERTION
@@ -57,8 +56,7 @@ extension:
     - Mu2e Offline software and Python environments from CVMFS on every worker
     - dCache disk, scratch and tape-backed storage for raw data, simulation and ntuples
     - Opportunistic extra capacity through the Open Science Grid
-  quantitative_values:
-    mu2e_recent_campaign_cpu_hours: 1600000
+  quantitative_values: {}
   access_protocol: 'jobsub_lite submission with a Fermilab grid token; data through dCache paths, xrootd or https'
   configuration: {}
 ---
@@ -76,7 +74,6 @@ uses it and how the Genesis phase 1 workflows depend on it.
 - **Storage**: dCache persistent disk, scratch and tape-backed areas for raw detector data, simulation and
   ntuples. Files are catalogued in MetaCat (card `mu2e-metacat-mcp`), which can translate names into paths or
   xrootd and https URLs.
-- **Scale**: a recent Mu2e production campaign used about 1.6 million CPU-hours on FermiGrid (Mu2e-doc-57514).
 
 ## Role in the Mu2e Genesis project
 

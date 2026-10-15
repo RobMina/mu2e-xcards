@@ -41,7 +41,7 @@ keywords:
 sensitivity: general
 developed_by:
   - Mu2e Genesis team
-version: '0.4.0'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: Apache-2.0
@@ -80,13 +80,13 @@ extension:
 A read-only Model Context Protocol (MCP) server over arXiv's public Atom API, using the `arxiv` Python package. It
 is a general literature tool, deployed for Mu2e agents alongside the experiment-specific servers. Software:
 `mcp/arxiv` in [Mu2e/aitools](https://github.com/Mu2e/aitools) (Apache-2.0). This card describes the deployment on
-the Mu2e AI node, version 0.4.0 as of 2026-10-15.
+the Mu2e AI node.
 
 ## What it does
 
 | Tool | Purpose |
 |---|---|
-| `search_papers` | Search by `query` (raw arXiv syntax) and/or named `title`, `author`, `abstract`, `category` filters, combined with AND; sort by relevance, last update or submission date; default 20 results |
+| `search_papers` | Search by `query` (raw arXiv syntax) and/or named `title`, `author`, `abstract`, `category` filters, combined with AND; sort by relevance, last update or submission date |
 | `get_paper` | Full metadata for one arXiv id: title, authors, abstract, categories, dates, DOI, journal reference, PDF link (nothing is downloaded server-side) |
 | `get_server_info` | Version, rate-limit settings and notes |
 
@@ -106,6 +106,6 @@ documents) and INSPIRE-HEP (citations and bibliography).
 ## Limitations
 
 - arXiv has no citation graph, author profiles, collaboration filter or BibTeX; use the INSPIRE-HEP server for those.
-- arXiv rate-limits per source IP, and the server paces itself (3 s between pages, 3 retries), so it is not meant
-  for high-volume or concurrent use. A slow search usually means arXiv is throttling.
+- arXiv rate-limits per source IP, and the server paces its requests accordingly, so it is not meant for
+  high-volume or concurrent use. A slow search usually means arXiv is throttling.
 - Metadata only; it does not read paper full text.

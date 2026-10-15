@@ -12,8 +12,8 @@ description: >-
   the Mu2e analysis environment from CVMFS and reading EventNtuple files from
   dCache. In the Mu2e Genesis phase 1 project EAF provides the GPUs for training
   and benchmarking machine-learning anomaly detection models (transformer TranAD
-  and autoencoder models) on Mu2e detector data quality metrics, about one
-  hundred GPU-hours, for the agentic data quality monitoring workflow. Access
+  and autoencoder models) on Mu2e detector data quality metrics, for the agentic
+  data quality monitoring workflow. Access
   needs a Fermilab account and is through a web browser.
 
 science:
@@ -34,7 +34,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '2026-10-15'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: NOASSERTION
@@ -52,8 +52,7 @@ extension:
     - Mu2e Python analysis environment from CVMFS
     - Reads Mu2e files from Fermilab dCache
     - GPU training of machine-learning models on Mu2e data
-  quantitative_values:
-    genesis_gpu_hours_planned: 100
+  quantitative_values: {}
   access_protocol: 'Web browser (JupyterHub) with a Fermilab account'
   configuration: {}
 ---
@@ -74,8 +73,8 @@ Institutions and Future Colliders", 2025). This card describes Mu2e's use of it.
 ## Role in the Mu2e Genesis project
 
 GPU resource for the machine-learning half of the agentic DQM workflow (`mu2e-agentic-dqm`): training and
-benchmarking transformer (TranAD) and autoencoder anomaly-detection models on Mu2e detector metrics. The phase 1
-proposal estimates about 100 GPU-hours (Mu2e-doc-57514).
+benchmarking transformer (TranAD) and autoencoder anomaly-detection models on Mu2e detector metrics
+(Mu2e-doc-57514).
 
 ## Access
 
