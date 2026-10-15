@@ -20,13 +20,13 @@ description: |-
   Steps:
   1. A physicist gives an objective and constraints in natural language; the agent reads prior studies and Mu2e
      documentation, cards mu2e-memory-mcp and mu2e-kb-mcp.
-  2. The agent (or a Bayesian-optimization surrogate) proposes configurations: geometry variants, beamline settings,
-     pipeline stages. Simulation-interface and surrogate cards for Mu2eBO not written yet.
+  2. The agent (or the Bayesian-optimization surrogate, card mu2e-mu2ebo-surrogate) proposes configurations:
+     geometry variants, beamline settings, pipeline stages; Mu2eBO (card mu2e-mu2ebo) checks the study.
   3. Simulation campaigns run: Geant4 fast simulation and full chain (dts, digi, reco, EventNtuple) on FermiGrid or
      HPC (cards mu2e-fermigrid, mu2e-nersc-perlmutter, mu2e-anl-lcrc), G4beamline for the beamline, after a
-     one-event geometry pre-check. No simulation-interface card yet.
-  4. The analysis interface computes figures of merit for each configuration and adds a leaderboard row; inputs
-     and outputs can be located with card mu2e-metacat-mcp. No analysis card yet.
+     one-event geometry pre-check, driven by Mu2eBO campaigns (card mu2e-mu2ebo).
+  4. The analysis interface (card mu2e-analysis-mcp) computes figures of merit for each configuration and adds a
+     leaderboard row; inputs and outputs can be located with card mu2e-metacat-mcp.
   5. The surrogate refits on the leaderboard and suggests the next points; the agent explores across qualitatively
      different configurations and handles failed jobs.
   6. Results, traces and lessons are written to memory and reported to the collaboration, cards mu2e-memory-mcp
@@ -95,6 +95,15 @@ relationships:
   - type: runs_on
     target: mu2e-anl-lcrc
     target_label: Argonne LCRC clusters for Mu2e simulation
+  - type: has_part
+    target: mu2e-mu2ebo
+    target_label: Mu2eBO (autoresearch) closed-loop Bayesian optimization
+  - type: has_part
+    target: mu2e-mu2ebo-surrogate
+    target_label: Mu2eBO Gaussian-process surrogate MCP server
+  - type: has_part
+    target: mu2e-analysis-mcp
+    target_label: Mu2e Analysis MCP Server
   - type: based_on
     target: HEP-KE-Agent-xcard
     target_label: HEP-KE-Agent (AmSC IDA Pilot Knowledge Extraction)
@@ -114,10 +123,10 @@ follows the AmSC IDA Pilot Knowledge Extraction (HEP-KE) framework.
 | # | Step | Component | Card | Status (2026-10-15) |
 |---|---|---|---|---|
 | 1 | State objective and constraints; read prior studies | agent; memory and knowledge-base MCP servers | `mu2e-memory-mcp`, `mu2e-kb-mcp` | servers in production |
-| 2 | Propose configurations | agent; Mu2eBO GP surrogate (botorch) | none yet | prototyped |
-| 3 | Simulate | Mu2eBO campaign MCP and kits: Geant4 jobs via Mu2e production tools (grid or local), one-event geometry pre-check, G4beamline | none yet | prototyped; full-chain validation in progress |
-| 4 | Analyse and score | analysis interface (S/sqrt(B), radiation damage, stops/POT, energy deposition); file catalog | `mu2e-metacat-mcp` | prototyped for fast simulation |
-| 5 | Refit and choose next points; handle failures | Mu2eBO surrogate MCP; agent | none yet | prototyped |
+| 2 | Propose configurations | agent; Mu2eBO GP surrogate (botorch) | `mu2e-mu2ebo-surrogate`, `mu2e-mu2ebo` | prototyped |
+| 3 | Simulate | Mu2eBO campaign MCP and kits: Geant4 jobs via Mu2e production tools (grid or local), one-event geometry pre-check, G4beamline | `mu2e-mu2ebo` | prototyped; full-chain validation in progress |
+| 4 | Analyse and score | analysis interface (S/sqrt(B), radiation damage, stops/POT, energy deposition); file catalog | `mu2e-analysis-mcp`, `mu2e-metacat-mcp` | prototyped for fast simulation |
+| 5 | Refit and choose next points; handle failures | Mu2eBO surrogate MCP; agent | `mu2e-mu2ebo-surrogate` | prototyped |
 | 6 | Record, report, cite | memory and knowledge-base MCP servers; literature servers; reporting agent | `mu2e-memory-mcp`, `mu2e-kb-mcp`, `mu2e-inspirehep-mcp`, `mu2e-arxiv-mcp` | reporting agent planned |
 
 First result (September 2026, Mu2e-doc-58092): a Bayesian-optimization study of the Run-1A stopping target
@@ -147,6 +156,6 @@ damage; the unconstrained best was 4.41 (+35 %). Full-simulation validation of t
 
 ## Caveats
 
-- Steps 2, 3 and 5 run on Mu2eBO, which has no card yet; this card will link them once they exist.
+- The Mu2eBO and analysis-server cards are drafts pending review by their authors (Y. Oksuzian, M. MacKenzie).
 - A global surrogate over Mu2e's whole configuration space is out of scope for phase 1.
 - Fast-simulation figures of merit must be confirmed with full simulation before a configuration is recommended.
