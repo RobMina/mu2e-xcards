@@ -1,0 +1,7 @@
+# Minimal environment for scripts/validate.py:  conda env create -f environment.yml && conda activate mu2e-xcards
+name: mu2e-xcards
+channels: [conda-forge]
+dependencies:
+  - python>=3.10
+  - pyyaml
+  - jsonschema>=4.18
