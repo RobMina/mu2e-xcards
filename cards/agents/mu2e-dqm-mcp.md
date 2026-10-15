@@ -45,7 +45,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '0.4.0'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: Apache-2.0
@@ -90,7 +90,7 @@ A read-only Model Context Protocol (MCP) server over the Mu2e DQM database (`mu2
 Fermilab's Query Engine over HTTPS. Any MCP client (Claude Code, Codex, goose, or the Mu2e agentic DQM workflow) can
 use it to read detector and production quality metrics. Software: `mcp/dqm` in
 [Mu2e/aitools](https://github.com/Mu2e/aitools) (Apache-2.0). This card describes the deployment that serves the
-Mu2e collaboration, version 0.4.0 as of 2026-10-15.
+Mu2e collaboration.
 
 ## What it does
 
@@ -103,21 +103,22 @@ Mu2e collaboration, version 0.4.0 as of 2026-10-15.
 | `query_metrics` | Measured values (`numbers`) or limits and alarm codes (`limits`) for a source and metric over intervals: a plot-ready timeline |
 | `get_server_info` | Database, endpoint and query defaults |
 
-Results are JSON tables intended for the client model to interpret, tabulate or plot. Defaults are conservative
-(last 10 days, 100 rows); `query_metrics` reports whether its scan was complete, so an empty result can be told apart
-from a truncated one.
+Results are JSON tables intended for the client model to interpret, tabulate or plot. Defaults are conservative (a
+recent time window and a limited number of rows); `query_metrics` reports whether its scan was complete, so an empty
+result can be told apart from a truncated one.
 
-## Content (2026-10-15)
+## Content
 
-- 112 sources: Cosmic Ray Veto test-stand ageing and LED runs, Cosmic Ray Veto reconstruction of the cosmic-ray
-  data in the hall, nightly validation streams (simulation, reconstruction, mixing, trigger, build) and test sources.
-- 118 tracked metrics across Cosmic Ray Veto, tracker, calorimeter, straw and operations groups.
+- Sources such as Cosmic Ray Veto test-stand runs, reconstruction of the cosmic-ray data in the hall, and nightly
+  validation streams (simulation, reconstruction, mixing, trigger, build).
+- Tracked metrics grouped by detector (Cosmic Ray Veto, tracker, calorimeter) and operations.
+- `list_sources` and `list_values` show the current catalogue.
 
 ## How to use it
 
 - Transport: MCP streamable HTTP, listed in the Mu2e MCP registry on the Mu2e AI node at Fermilab.
 - Access: collaboration-internal. It is reachable only from the Fermilab network (on site, VPN or an SSH tunnel);
-  outside traffic is blocked by the lab firewall. No per-user key is needed today.
+  outside traffic is blocked by the lab firewall. No per-user key is needed.
 - Read-only: it cannot write metrics or limits; filling the database stays with the production DQM jobs.
 
 ## Role in the Mu2e Genesis project
@@ -132,8 +133,7 @@ workflow for the Cosmic Ray Run:
 
 ## Limitations
 
-- Coverage is what the production DQM jobs have filled. Many detector metrics, including several Cosmic Ray Veto
-  series, are still being added, and limits are missing for many metrics.
+- Coverage is what the production DQM jobs have filled, and not every metric has limits.
 - Unscoped queries scan only the most recent rows and filter client-side; check the scan-complete flag before
   treating "no rows" as "no data".
 - No authentication beyond the Fermilab network boundary.

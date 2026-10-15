@@ -42,7 +42,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '0.1.0'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: NOASSERTION
@@ -85,8 +85,8 @@ extension:
 
 # Mu2e Analysis MCP Server (figures of merit for optimization, anakit)
 
-[michaelmackenzie/analysis-mcp-server](https://github.com/michaelmackenzie/analysis-mcp-server) (M. MacKenzie;
-version 0.1.0, main at `232239f`, 2026-10-14), called `anakit` inside Mu2eBO. Its design: the science code is an
+[michaelmackenzie/analysis-mcp-server](https://github.com/michaelmackenzie/analysis-mcp-server) (M. MacKenzie),
+called `anakit` inside Mu2eBO. Its design: the science code is an
 ordinary Python package, and a generic wrapper publishes the functions it lists as MCP tools, following the HEP-KE
 `spectra-mcp-server` pattern. This card is a draft written from the repository for review by its author.
 
@@ -97,14 +97,14 @@ ordinary Python package, and a generic wrapper publishes the functions it lists 
 | `list_analyses` | The catalogue: each analysis with its input kind (art files or ROOT file), parameters and metrics |
 | `run_analysis` | Run one analysis over a file, a file list, a SAM definition or a MetaCat dataset (optionally capped in files and events) and return its metrics |
 
-Analyses: `edep`, `count`, `muon_stop_rate`, `stop_materials`, `approx_ce_sensitivity`, `trigger_efficiency`,
-`trigger_rate`, `trigger_timing`, `trigger_efficiency_ntuple`, plus full-simulation sensitivity analyses
-(S. Middleton). Mu2e Offline comes from a work area, a Musing or a tarball.
+Analyses include, for example, `edep`, `muon_stop_rate`, `approx_ce_sensitivity` and the trigger analyses, plus
+full-simulation sensitivity analyses (S. Middleton); `list_analyses` gives the current catalogue. Mu2e Offline comes
+from a work area, a Musing or a tarball.
 
 ## Role in the Mu2e Genesis project
 
 The Analysis interface of phase 1 (Mu2e-doc-57514): in the Run-1 optimization workflow (`mu2e-run1-optimization`)
-Mu2eBO (`mu2e-mu2ebo`) calls it for every evaluated configuration. In the stopping-target study four analyses
+Mu2eBO (`mu2e-mu2ebo`) calls it for every evaluated configuration. In the stopping-target study its analyses
 score each design: muon stop rate, conversion-electron energy deposition, approximate sensitivity (using the stop
 rate) and beam-flash energy deposition (the radiation-damage objective).
 

@@ -48,7 +48,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '0.7.3'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: Apache-2.0
@@ -91,14 +91,14 @@ extension:
 A Model Context Protocol (MCP) server that stores agents' documents in PostgreSQL and serves them back later, across
 sessions and across per-session sandboxes that keep no disk of their own. Unlike the other Mu2e MCP servers it
 writes, but only by appending. Software: `mcp/memory` in [Mu2e/aitools](https://github.com/Mu2e/aitools)
-(Apache-2.0). This card describes the deployment that serves the Mu2e collaboration, version 0.7.3 as of 2026-10-15.
+(Apache-2.0). This card describes the deployment that serves the Mu2e collaboration.
 
 ## What it does
 
 | Tool | Purpose |
 |---|---|
-| `put_document` | Create a document or add a version; `mode="replace"` stores the content given, `mode="append"` adds to the current content. Optional keywords, description, weight (0-100), expiry |
-| `get_document` | The current or a given version. Refuses to return more than about 100 kB inline; can write a large document to a file instead |
+| `put_document` | Create a document or add a version; `mode="replace"` stores the content given, `mode="append"` adds to the current content. Optional keywords, description, weight, expiry |
+| `get_document` | The current or a given version. Refuses to return a large document inline; can write it to a file instead |
 | `list_projects` | The caller's project names |
 | `list_documents` | Metadata and size, never content; filter by project, name, keywords, description, weight, dates; include expired or retired on request |
 | `list_versions` | Every version of a document, newest first |
@@ -114,7 +114,7 @@ writes, but only by appending. Software: `mcp/memory` in [Mu2e/aitools](https://
   shared.
 - **Nothing is deleted.** Every write is a new row. Retiring a document only hides it from listings. Removing content
   (a pasted credential, personal data) needs a database administrator, so never store secrets.
-- Documents are capped at 1 MiB; Markdown by convention.
+- Documents have a size cap; Markdown by convention.
 
 ## How to use it
 

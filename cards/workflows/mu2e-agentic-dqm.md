@@ -20,7 +20,7 @@ description: |-
      mu2e-dqm-mcp to read them.
   2. ML anomaly detection (transformer TranAD and autoencoder models from the Hardware-Aware AI toolkit) scores
      metric timelines and histograms, trained on GPUs at the Elastic Analysis Facility (card mu2e-fnal-eaf);
-     traditional limit checks and chi-square tests run as the baseline. No model card yet.
+     traditional limit checks and chi-square tests run as the baseline.
   3. The agent compares each new run's metrics with their limits and anomaly scores and flags anomalies, card
      mu2e-dqm-mcp.
   4. For each flagged anomaly the agent gathers temporally correlated context: logbook and shift entries (card
@@ -58,7 +58,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '0.1.0'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: Apache-2.0
@@ -109,14 +109,14 @@ data-quality toolkit.
 
 ## Steps
 
-| # | Step | Component | Card | Status (2026-10-15) |
-|---|---|---|---|---|
-| 1 | Fill the DQM database with per-run metrics | Offline DQM production; DQM MCP server for reads | `mu2e-dqm-mcp` | running; CRV metrics being extended |
-| 2 | Score metrics for anomalies; run the traditional baseline | TranAD / autoencoder (HAAI toolkit); limits, chi-square and pulls vs references | none yet | prototype on CRV timelines |
-| 3 | Flag anomalies per run | agent + DQM MCP server | `mu2e-dqm-mcp` | MCP server in production; agent planned |
-| 4 | Assemble context for each anomaly | ECL logbook, run database, DocDB knowledge base, file catalog MCP servers | `mu2e-ecl-mcp`, `mu2e-runs-mcp`, `mu2e-kb-mcp`, `mu2e-metacat-mcp` | MCP servers in production |
-| 5 | Summarise for the shifter, keep notes, escalate | agent; memory MCP server | `mu2e-memory-mcp` | planned |
-| 6 | Collect shifter feedback; benchmark on injected anomalies | feedback mechanism; validation set | none yet | planned |
+| # | Step | Component | Card |
+|---|---|---|---|
+| 1 | Fill the DQM database with per-run metrics | Offline DQM production; DQM MCP server for reads | `mu2e-dqm-mcp` |
+| 2 | Score metrics for anomalies; run the traditional baseline | TranAD / autoencoder (HAAI toolkit); limits, chi-square and pulls vs references | none yet |
+| 3 | Flag anomalies per run | agent + DQM MCP server | `mu2e-dqm-mcp` |
+| 4 | Assemble context for each anomaly | ECL logbook, run database, DocDB knowledge base, file catalog MCP servers | `mu2e-ecl-mcp`, `mu2e-runs-mcp`, `mu2e-kb-mcp`, `mu2e-metacat-mcp` |
+| 5 | Summarise for the shifter, keep notes, escalate | agent; memory MCP server | `mu2e-memory-mcp` |
+| 6 | Collect shifter feedback; benchmark on injected anomalies | feedback mechanism; validation set | none yet |
 
 ## Inputs
 
@@ -142,6 +142,6 @@ data-quality toolkit.
 
 ## Caveats
 
-- This card describes the planned workflow; steps 2, 5 and 6 are not deployed yet and have no cards.
+- This card describes the planned workflow; steps without a card are not yet deployed as named tools.
 - It depends on the Cosmic Ray Run schedule and on the DQM database coverage of the detector metrics.
 - The agent assists shifters; decisions on data quality stay with people.

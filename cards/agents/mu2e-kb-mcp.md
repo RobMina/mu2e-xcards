@@ -49,7 +49,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '0.2.6'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: MIT
@@ -93,7 +93,7 @@ extension:
 A Model Context Protocol (MCP) server over the Mu2e knowledge base, so that any MCP client (Claude Code, Codex,
 Cursor, goose, or the Mu2e agentic workflows) can search and read the collaboration's documentation. Software:
 [Mu2e/kb-mcp](https://github.com/Mu2e/kb-mcp) (MIT). This card describes the deployment that serves the Mu2e
-collaboration, version 0.2.6 as of 2026-10-15.
+collaboration.
 
 ## What it does
 
@@ -109,9 +109,9 @@ plots are searchable. All data stays on site in a Fermilab-managed PostgreSQL da
 
 ## Content
 
-- **Mu2e DocDB**: about 24,000 documents (89,445 indexed text, table and image chunks on 2026-10-15).
-- The tool interface also names Mu2e wiki pages, INSPIRE-HEP papers, meeting transcripts and uploads as sources.
-  On 2026-10-15 only DocDB is populated in this deployment.
+- **Mu2e DocDB**: technical notes, talks, reviews and meeting slides, indexed as text, table and image chunks.
+- The tool interface also accepts Mu2e wiki pages, INSPIRE-HEP papers, meeting transcripts and uploads as sources;
+  which of them are populated depends on the deployment (`kb_search` source filters show what is there).
 
 ## How to use it
 
@@ -129,8 +129,8 @@ documentation. It builds on the AmSC IDA Pilot Knowledge Extraction (HEP-KE) wor
 
 ## Limitations
 
-- Coverage is DocDB only today; wiki, papers and meeting transcripts are not yet ingested.
-- `kb_research` failed server-side on 2026-10-15; `kb_search` and `kb_get` cover most needs.
+- Coverage is limited to the sources ingested into the deployment.
+- `kb_research` is a multi-step agent and much slower and costlier than `kb_search` and `kb_get`, which cover most needs.
 - Content is collaboration-internal. Answers inherit any errors in the source documents and in the automatically
   generated summaries and image descriptions.
 - Not reachable from outside the Fermilab network.

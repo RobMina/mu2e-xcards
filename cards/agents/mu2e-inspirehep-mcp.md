@@ -42,7 +42,7 @@ keywords:
 sensitivity: general
 developed_by:
   - Mu2e Genesis team
-version: '0.4.0'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: Apache-2.0
@@ -87,7 +87,7 @@ A read-only Model Context Protocol (MCP) server over INSPIRE-HEP's public REST A
 independently for Mu2e (it does not contain code from the third-party `inspirehep-mcp` package). It is a general HEP
 literature tool, deployed for Mu2e agents alongside the experiment-specific servers. Software: `mcp/inspirehep` in
 [Mu2e/aitools](https://github.com/Mu2e/aitools) (Apache-2.0). This card describes the deployment on the Mu2e AI
-node, version 0.4.0 as of 2026-10-15.
+node.
 
 ## What it does
 
@@ -107,7 +107,7 @@ node, version 0.4.0 as of 2026-10-15.
 - Transport: MCP streamable HTTP, listed in the Mu2e MCP registry on the Mu2e AI node at Fermilab.
 - Access: reachable from the Fermilab network (on site, VPN or an SSH tunnel); no key. The data are public
   INSPIRE-HEP records, and anyone outside Fermilab can run the same server from the open-source package.
-- Read-only. Responses are cached for an hour.
+- Read-only. Responses are cached.
 
 ## Role in the Mu2e Genesis project
 
@@ -119,6 +119,6 @@ knowledge base (internal documents).
 ## Limitations
 
 - `get_paper_figures` is best effort: INSPIRE's public API does not reliably expose figures.
-- INSPIRE limits each source IP to 15 requests per 5 seconds; the server paces its own requests at 2 per second,
-  but cannot account for other traffic from the same IP.
+- INSPIRE rate-limits each source IP; the server paces its own requests but cannot account for other traffic from
+  the same IP.
 - Metadata and citations only; no paper full text.

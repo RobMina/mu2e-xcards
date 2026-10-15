@@ -19,9 +19,8 @@ description: >-
   surrogate (BoTorch) then proposes the next batch. Agents can list, show and
   check studies, dry-run and launch campaigns with operator approval, follow
   them and read leaderboards. It is the optimization engine of the Mu2e Genesis
-  phase 1 Run-1 optimization workflow; a stopping-target study found a 49-foil
-  design with 27 percent higher sensitivity than the deployed target at equal
-  radiation damage. Runs on Fermilab Mu2e machines with the user's grid
+  phase 1 Run-1 optimization workflow, used for stopping-target and
+  production-target studies. Runs on Fermilab Mu2e machines with the user's grid
   credentials.
 
 science:
@@ -47,7 +46,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '0.2.0'
+version: '1.0.0'
 last_updated: '2026-10-15'
 license:
   spdx_id: NOASSERTION
@@ -101,8 +100,8 @@ extension:
 # Mu2eBO (autoresearch) closed-loop Bayesian optimization of Mu2e geometry
 
 [Mu2e/Mu2eBO](https://github.com/Mu2e/Mu2eBO) ("autoresearch", Y. Oksuzian) closes the loop between a
-Gaussian-process optimizer and the Mu2e simulation and analysis chain. Release v00_02_00 (main at `ed39d1b`,
-2026-10-09). This card is a draft written from the repository for review by its authors.
+Gaussian-process optimizer and the Mu2e simulation and analysis chain. This card is a draft written from the
+repository for review by its authors.
 
 ## How it works
 
@@ -113,10 +112,10 @@ Gaussian-process optimizer and the Mu2e simulation and analysis chain. Release v
   through Mu2e production tools, grid or local), `offline_preflight` (one-event Geant4 overlap check of the
   rendered geometry), `anakit` (the Mu2e analysis MCP server, card `mu2e-analysis-mcp`) and `beamkit`
   (G4beamline for the production target).
-- **Fast simulation**: in the stopping-target study each candidate runs three Geant4 steps on the grid (`mubeam`,
-  15 jobs; `mustops_ce`, 15 jobs; `elebeam_flash`, 100 jobs) and four analyses on the analysis server (muon stop
-  rate, conversion-electron energy deposition, approximate sensitivity, beam-flash energy deposition). A full
-  dts -> digi -> reco -> ntuple chain (`ce_chain`) is the validation path for selected designs.
+- **Fast simulation**: a study defines a short chain of Geant4 grid steps per candidate (for the stopping target:
+  muon beam, conversion-electron stops and beam flash), scored by analyses on the analysis server (muon stop rate,
+  energy deposition, approximate sensitivity, beam-flash radiation damage). A full dts -> digi -> reco -> ntuple
+  chain (`ce_chain`) is the validation path for selected designs.
 - **Leaderboard**: one TSV per study; each row is one evaluated configuration with its objectives.
 - **Optimizer**: BoTorch GP with batch pickers (qNEHVI, qLogNEI, a budget-constrained sensitivity picker, hybrid);
   card `mu2e-mu2ebo-surrogate`.
@@ -126,20 +125,18 @@ Gaussian-process optimizer and the Mu2e simulation and analysis chain. Release v
 | Tool | Purpose |
 |---|---|
 | `list_studies`, `show_study`, `study_guide` | Browse studies and the study-writing guide |
-| `start_check`, `check_result` | Check a draft exactly as the command-line checker does (loads, paths exist, launch check, geometry pre-check at the centre of the knob box, about 6 minutes) |
+| `start_check`, `check_result` | Check a draft exactly as the command-line checker does (loads, paths exist, launch check, geometry pre-check at the centre of the knob box) |
 | `start_campaign` | Dry run by default (launch checks, exact command, job budget); launches only with `confirm=true` after the operator's OK |
 | `campaign_status`, `stop_campaign` | Follow a campaign; stop launching new evaluations (running ones finish) |
 | `leaderboard` | A study's evaluated configurations, best first |
 
 The study tools submit no jobs and write no leaderboard rows; only campaigns do.
 
-## Results (2026-10)
+## Studies
 
-| Study | Rows | Result |
-|---|---|---|
-| `foilspfbpz_ax` (Run-1A stopping target, 10 knobs) | 374 | best S/sqrt(B) 4.41 unconstrained; 4.15 within the deployed radiation-damage budget, vs 3.26 for the deployed 37-foil target (Mu2e-doc-58092) |
-| `foilsflash_ax` | 414 | stopping target with beam-flash damage as a second objective |
-| `ptg4bl` | | production target on G4beamline |
+Studies cover the Run-1A stopping target (sensitivity, with beam-flash radiation damage as a constraint or second
+objective) and the production target on G4beamline. `list_studies` gives the current set, and `leaderboard` the
+results; published results are in Mu2e documents (for example Mu2e-doc-58092).
 
 ## Role in the Mu2e Genesis project
 
@@ -152,6 +149,6 @@ manually optimized baseline.
 
 - Runs on Fermilab Mu2e interactive machines (stdio MCP), with the operator's own Kerberos ticket and grid token;
   campaigns submit grid jobs under that identity. Launching a campaign needs the operator's approval.
-- One evaluation is many grid jobs and takes hours; campaigns run for days.
+- One evaluation is many grid jobs, and a campaign runs many evaluations, so campaigns are long-running.
 - Fast-simulation scores must be confirmed with full simulation before a design is recommended.
 - The repository declares no license; ask the authors before reuse.
