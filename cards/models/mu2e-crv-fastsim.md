@@ -55,8 +55,8 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.1.0'
-last_updated: '2026-10-16'
+version: '1.2.0'
+last_updated: '2026-10-21'
 license:
   spdx_id: Apache-2.0
   name: Apache License 2.0
@@ -65,6 +65,9 @@ relationships:
   - type: runs_on
     target: mu2e-alcf-polaris
     target_label: ALCF Polaris for Mu2e fast simulation and reconstruction
+  - type: runs_on
+    target: mu2e-uva-hpc
+    target_label: UVA Rivanna/Afton HPC for Mu2e fast simulation and reconstruction
   - type: runs_on
     target: mu2e-fermigrid
     target_label: FermiGrid for Mu2e

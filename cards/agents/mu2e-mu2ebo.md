@@ -46,8 +46,8 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.1.0'
-last_updated: '2026-10-15'
+version: '1.2.0'
+last_updated: '2026-10-21'
 license:
   spdx_id: NOASSERTION
   name: 'No license declared in the repository'
@@ -62,6 +62,12 @@ relationships:
   - type: runs_on
     target: mu2e-fermigrid
     target_label: FermiGrid for Mu2e
+  - type: runs_on
+    target: mu2e-uva-hpc
+    target_label: UVA Rivanna/Afton HPC for Mu2e fast simulation and reconstruction
+  - type: invokes
+    target: mu2e-crv-fastreco
+    target_label: Mu2e CRV fast reconstruction (through the fastsimkit kit)
   - type: invokes
     target: mu2e-mu2ebo-reporter
     target_label: Mu2eBO campaign reporting agent (report at loop exit and on request)
@@ -93,6 +99,7 @@ extension:
     - Read a study's leaderboard, best configurations first (leaderboard)
     - Report on a campaign automatically at loop exit, and on request mid-campaign (start_report, report)
     - Run fast Geant4 simulation chains on the Fermilab grid or locally, and G4beamline beamline jobs
+    - Run the JAX CRV fast chain on an HPC GPU endpoint, one Slurm job per point (fastsimkit)
     - Optimize stopping-target and production-target geometry for muon-to-electron conversion sensitivity
   capabilities:
     streaming: false
@@ -115,7 +122,9 @@ repository for review by its authors.
 - **Kits**: each step runs on a kit that speaks one contract (submit, status, results): `prodtools` (Geant4 jobs
   through Mu2e production tools, grid or local), `offline_preflight` (one-event Geant4 overlap check of the
   rendered geometry), `anakit` (the Mu2e analysis MCP server, card `mu2e-analysis-mcp`) and `beamkit`
-  (G4beamline for the production target).
+  (G4beamline for the production target), plus `fastsimkit`, a native kit that runs the JAX fast chain (cards
+  `mu2e-crv-fastsim`, `mu2e-crv-fastreco`) as one Slurm job per point on an HPC endpoint (card `mu2e-uva-hpc`);
+  its first task is a throughput smoke test.
 - **Fast simulation**: a study defines a short chain of Geant4 grid steps per candidate (for the stopping target:
   muon beam, conversion-electron stops and beam flash), scored by analyses on the analysis server (muon stop rate,
   energy deposition, approximate sensitivity, beam-flash radiation damage). A full dts -> digi -> reco -> ntuple

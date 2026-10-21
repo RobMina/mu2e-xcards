@@ -18,9 +18,11 @@ description: >-
   waveform path. Purpose: one Bayesian-optimization point of the CRV response
   tuning loop (resimulate and re-reconstruct on cached events) in minutes on one
   GPU node instead of hours of CPU, with the stock Offline reconstruction as the
-  validation reference. A CPU version of the faster pulse fit is planned for
-  Offline. Status: planned; validation against the stock reconstruction on
-  existing digis comes first.
+  validation reference. Validated against the stock reconstruction on Monte
+  Carlo and KPP cosmic data (identical coincidences, matching pulses) on
+  NVIDIA A100 and B200 and on CPU; callable from the Mu2eBO optimizer through
+  the fastsimkit kit. A CPU version of the faster pulse fit is proposed for
+  Offline.
   Open source (Apache-2.0) in github.com/RobMina/mu2e-crv-fastsim (the crv/
   submodule of github.com/RobMina/mu2e-fastsim), package crvfastsim.reco.
 
@@ -50,8 +52,8 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.1.0'
-last_updated: '2026-10-16'
+version: '1.2.0'
+last_updated: '2026-10-21'
 license:
   spdx_id: Apache-2.0
   name: Apache License 2.0
@@ -66,6 +68,9 @@ relationships:
   - type: runs_on
     target: mu2e-alcf-polaris
     target_label: ALCF Polaris for Mu2e fast simulation and reconstruction
+  - type: runs_on
+    target: mu2e-uva-hpc
+    target_label: UVA Rivanna/Afton HPC for Mu2e fast simulation and reconstruction
 
 io_contract:
   input_modes:
@@ -119,7 +124,8 @@ container: [RobMina/mu2e-crv-fastsim](https://github.com/RobMina/mu2e-crv-fastsi
 - **End to end:** compared with the stock chain on the CRV observables of the analysis.
 - **Objective:** the same optimum of the tuning objective.
 
-Starts on existing Monte Carlo and KPP data digis, before the fast simulation is complete.
+Passed on existing Monte Carlo and KPP data digis (Polaris A100, Aurora PVC, UVA A100 and B200, CPU); the end-to-end
+and objective checks need the fast simulation's charges.
 
 ## Intended use
 
@@ -129,5 +135,5 @@ Starts on existing Monte Carlo and KPP data digis, before the fast simulation is
 
 ## Limitations
 
-- Early development: prototypes first, validation in progress. Extracted configuration only.
+- Extracted configuration only; the veto-efficiency extension to the full detector is in development.
 - Reproduces what the stock digitisation models; effects missing there are added to both paths together.

@@ -54,8 +54,8 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.1.0'
-last_updated: '2026-10-16'
+version: '1.2.0'
+last_updated: '2026-10-21'
 license:
   spdx_id: Apache-2.0
   name: Apache License 2.0
@@ -88,6 +88,9 @@ relationships:
     target: mu2e-alcf-polaris
     target_label: ALCF Polaris for Mu2e fast simulation and reconstruction
   - type: runs_on
+    target: mu2e-uva-hpc
+    target_label: UVA Rivanna/Afton HPC for Mu2e fast simulation and reconstruction
+  - type: runs_on
     target: mu2e-fermigrid
     target_label: FermiGrid for Mu2e
 ---
@@ -114,7 +117,8 @@ The fast simulation and reconstruction: [RobMina/mu2e-crv-fastsim](https://githu
 
 ## Caveats
 
-- Planned: the fast components are in development (CRV) or at first-draft stage (tracker); the optimizer integration
-  is deferred until the fast path exists.
+- The CRV fast reconstruction is validated and reachable from Mu2eBO through the `fastsimkit` kit (UVA endpoint,
+  card `mu2e-uva-hpc`), with a throughput smoke task so far; the response and objective tasks and the tracker stage
+  are in development.
 - Fast-path results are a screening tier; recommendations are confirmed with the stock chain.
 - Results are reported in Mu2e documents, not in this card.
