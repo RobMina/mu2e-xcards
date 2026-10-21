@@ -21,8 +21,8 @@ description: >-
   validation reference. A CPU version of the faster pulse fit is planned for
   Offline. Status: planned; validation against the stock reconstruction on
   existing digis comes first.
-  Open source (Apache-2.0) in github.com/RobMina/mu2e-crv-fastsim, package
-  crvfastsim.reco.
+  Open source (Apache-2.0) in github.com/RobMina/mu2e-crv-fastsim (the crv/
+  submodule of github.com/RobMina/mu2e-fastsim), package crvfastsim.reco.
 
 science:
   - particle-physics
