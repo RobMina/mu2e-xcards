@@ -46,7 +46,7 @@ last_updated: '2026-10-16'
 license:
   spdx_id: Apache-2.0
   name: Apache License 2.0
-  url: https://github.com/RobMina/mu2e-crv-fastsim
+  url: https://github.com/RobMina/mu2e-tracker-fastsim
 relationships:
   - type: based_on
     target: mu2e-crv-fastsim
@@ -111,4 +111,4 @@ loop of the extracted configuration.
 ## Limitations
 
 - Not started. Extracted (no field) configuration only; field-on transport is out of scope.
-- Code will live with the CRV stage in [RobMina/mu2e-crv-fastsim](https://github.com/RobMina/mu2e-crv-fastsim) (Apache-2.0).
+- Code: [RobMina/mu2e-tracker-fastsim](https://github.com/RobMina/mu2e-tracker-fastsim) (Apache-2.0), the `tracker/` submodule of [RobMina/mu2e-fastsim](https://github.com/RobMina/mu2e-fastsim), building on the shared core [RobMina/mu2e-fastsim-core](https://github.com/RobMina/mu2e-fastsim-core).

@@ -47,7 +47,7 @@ last_updated: '2026-10-16'
 license:
   spdx_id: Apache-2.0
   name: Apache License 2.0
-  url: https://github.com/RobMina/mu2e-crv-fastsim
+  url: https://github.com/RobMina/mu2e-tracker-fastsim
 relationships:
   - type: based_on
     target: mu2e-crv-fastreco
@@ -118,4 +118,4 @@ configuration.
 
 - Not started. No-field (straight-line) tracks only; a GPU helix fit is out of scope.
 - KPP data unpacking stays in the stock chain.
-- Code will live with the CRV stage in [RobMina/mu2e-crv-fastsim](https://github.com/RobMina/mu2e-crv-fastsim) (Apache-2.0).
+- Code: [RobMina/mu2e-tracker-fastsim](https://github.com/RobMina/mu2e-tracker-fastsim) (Apache-2.0), the `tracker/` submodule of [RobMina/mu2e-fastsim](https://github.com/RobMina/mu2e-fastsim), building on the shared core [RobMina/mu2e-fastsim-core](https://github.com/RobMina/mu2e-fastsim-core).

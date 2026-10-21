@@ -79,7 +79,8 @@ itself; the Discovery Engine corpus has no ALCF facility card yet to point to.
 
 ## Practical notes
 
-The job drivers are public in [RobMina/mu2e-crv-fastsim](https://github.com/RobMina/mu2e-crv-fastsim) (`iri/`).
+The job drivers are public in [RobMina/mu2e-fastsim-core](https://github.com/RobMina/mu2e-fastsim-core) (`iri/`), the
+`core/` submodule of [RobMina/mu2e-fastsim](https://github.com/RobMina/mu2e-fastsim).
 
 
 - The ALCF IRI API implements less than its published OpenAPI specification: no file upload, and a limited command
