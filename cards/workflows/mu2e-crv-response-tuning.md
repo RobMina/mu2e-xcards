@@ -88,6 +88,9 @@ relationships:
     target: mu2e-alcf-polaris
     target_label: ALCF Polaris for Mu2e fast simulation and reconstruction
   - type: runs_on
+    target: mu2e-alcf-aurora
+    target_label: ALCF Aurora for Mu2e fast simulation and reconstruction
+  - type: runs_on
     target: mu2e-uva-hpc
     target_label: UVA Rivanna/Afton HPC for Mu2e fast simulation and reconstruction
   - type: runs_on
