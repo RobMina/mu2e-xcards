@@ -14,8 +14,9 @@ description: >-
   conditions tables fetched from CVMFS into node memory and deleted at exit, and
   Mu2e-internal reference files streamed into the job and never stored on the
   cluster. Jobs are submitted over SSH and Slurm, by hand or by the fastsimkit
-  kit of the Mu2eBO Bayesian-optimization engine, which turns one optimization
-  point into one Slurm job. A university-allocation complement to the DOE
+  kit of the Mu2eBO Bayesian-optimization engine, which runs one optimization
+  point as one or many single-GPU Slurm jobs (single-GPU jobs start quickly
+  where whole GPU nodes queue for hours). A university-allocation complement to the DOE
   leadership facilities for the fast chain.
 
 science:
@@ -41,8 +42,8 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.0.0'
-last_updated: '2026-10-21'
+version: '1.1.0'
+last_updated: '2026-10-22'
 license:
   spdx_id: NOASSERTION
   name: ''
@@ -80,7 +81,8 @@ card covers Mu2e's workflow on the cluster, not the cluster itself.
 - The same physics validation as on ALCF Polaris (photon and SiPM response with the real tables, pulse and
   coincidence reconstruction on KPP cosmic data, reproducibility per seed and between CPU and GPU), on A100 and B200.
 - `fastsimkit`, the Mu2eBO native kit in [RobMina/mu2e-fastsim-core](https://github.com/RobMina/mu2e-fastsim-core)
-  (`mu2efastsim.endpoints`), submits one Slurm job per optimization point and returns its metrics.
+  (`mu2efastsim.endpoints`), submits an optimization point as one Slurm job, or (task `chain_point`) as many
+  single-GPU jobs whose Mu2e-internal inputs are streamed into each job's memory, and returns the merged metrics.
 
 ## Practical notes
 
@@ -89,6 +91,8 @@ card covers Mu2e's workflow on the cluster, not the cluster itself.
 - The scratch path is a symbolic link: bind the resolved path into Apptainer.
 - Compute nodes are not reachable by SSH; files go into a running job with `srun --overlap`.
 - An A100 costs less per event than a B200 for this chain; B200 jobs need an image with a recent cuBLAS.
+- Work is split into many single-GPU jobs: whole GPU nodes are rarely free, single GPUs usually are.
+- Streaming the inputs from Fermilab dominates short jobs: give each job enough work to amortise it.
 
 ## Access
 
