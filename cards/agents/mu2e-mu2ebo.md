@@ -20,8 +20,11 @@ description: >-
   check studies, dry-run and launch campaigns with operator approval, follow
   them and read leaderboards. It is the optimization engine of the Mu2e Genesis
   phase 1 Run-1 optimization workflow, used for stopping-target and
-  production-target studies. Runs on Fermilab Mu2e machines with the user's grid
-  credentials.
+  production-target studies. A native fastsimkit kit (on a fork branch, not yet
+  in the main repository) runs the Mu2e Geant4-free GPU fast simulation and
+  reconstruction on HPC and Fermilab GPU endpoints, for CRV response tuning
+  against cosmic data and CRV veto studies. Runs on Fermilab Mu2e machines with
+  the user's grid credentials.
 
 science:
   - particle-physics
@@ -46,8 +49,8 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.2.0'
-last_updated: '2026-10-21'
+version: '1.3.0'
+last_updated: '2026-10-29'
 license:
   spdx_id: NOASSERTION
   name: 'No license declared in the repository'
@@ -65,6 +68,9 @@ relationships:
   - type: runs_on
     target: mu2e-uva-hpc
     target_label: UVA Rivanna/Afton HPC for Mu2e fast simulation and reconstruction
+  - type: runs_on
+    target: mu2e-fnal-eaf
+    target_label: Fermilab Elastic Analysis Facility (GPU endpoint of the fastsimkit kit)
   - type: invokes
     target: mu2e-crv-fastreco
     target_label: Mu2e CRV fast reconstruction (through the fastsimkit kit)
@@ -99,7 +105,7 @@ extension:
     - Read a study's leaderboard, best configurations first (leaderboard)
     - Report on a campaign automatically at loop exit, and on request mid-campaign (start_report, report)
     - Run fast Geant4 simulation chains on the Fermilab grid or locally, and G4beamline beamline jobs
-    - Run the JAX CRV fast chain on an HPC GPU endpoint, one Slurm job per point (fastsimkit)
+    - Run the JAX CRV fast chain, CRV response-tuning points and CRV veto cut evaluations on an HPC or Fermilab GPU endpoint (fastsimkit)
     - Optimize stopping-target and production-target geometry for muon-to-electron conversion sensitivity
   capabilities:
     streaming: false
@@ -123,8 +129,13 @@ repository for review by its authors.
   through Mu2e production tools, grid or local), `offline_preflight` (one-event Geant4 overlap check of the
   rendered geometry), `anakit` (the Mu2e analysis MCP server, card `mu2e-analysis-mcp`) and `beamkit`
   (G4beamline for the production target), plus `fastsimkit`, a native kit that runs the JAX fast chain (cards
-  `mu2e-crv-fastsim`, `mu2e-crv-fastreco`) as one Slurm job per point on an HPC endpoint (card `mu2e-uva-hpc`);
-  its first task is a throughput smoke test.
+  `mu2e-crv-fastsim`, `mu2e-crv-fastreco`) on a GPU endpoint: Slurm over SSH at UVA (card `mu2e-uva-hpc`, inputs
+  streamed into each job) or the Fermilab Elastic Analysis Facility (card `mu2e-fnal-eaf`, inputs read in place).
+  Its tasks cover throughput and regression checks, fast-chain points on cosmic samples (`chain_point`), CRV
+  response tuning against KPP cosmic data (`crv_response`, workflow card `mu2e-crv-response-tuning`), a CRV veto
+  cut evaluation on cached stock coincidences (`veto_c4`) and a prototype muon-beam stopping task (`beam_point`).
+  No tracker task exists yet. `fastsimkit` is on a fork branch (`fastsimkit`) and in the fast-simulation core
+  library; it is not yet merged into Mu2e/Mu2eBO.
 - **Fast simulation**: a study defines a short chain of Geant4 grid steps per candidate (for the stopping target:
   muon beam, conversion-electron stops and beam flash), scored by analyses on the analysis server (muon stop rate,
   energy deposition, approximate sensitivity, beam-flash radiation damage). A full dts -> digi -> reco -> ntuple
@@ -163,6 +174,8 @@ manually optimized baseline.
 
 - Runs on Fermilab Mu2e interactive machines (stdio MCP), with the operator's own Kerberos ticket and grid token;
   campaigns submit grid jobs under that identity. Launching a campaign needs the operator's approval.
+- `fastsimkit` endpoints use the operator's own access: an SSH login on the UVA network for UVA, a personal API
+  token for the Elastic Analysis Facility.
 - One evaluation is many grid jobs, and a campaign runs many evaluations, so campaigns are long-running.
 - Fast-simulation scores must be confirmed with full simulation before a design is recommended.
 - The repository declares no license; ask the authors before reuse.

@@ -20,9 +20,12 @@ description: >-
   GPU node instead of hours of CPU, with the stock Offline reconstruction as the
   validation reference. Validated against the stock reconstruction on Monte
   Carlo and KPP cosmic data (identical coincidences, matching pulses) on
-  NVIDIA A100 and B200 and on CPU; callable from the Mu2eBO optimizer through
-  the fastsimkit kit. A CPU version of the faster pulse fit is proposed for
-  Offline.
+  NVIDIA A100 and B200 and on CPU, including stock-equivalent CRV validation
+  and DQM histograms; callable from the Mu2eBO optimizer through the fastsimkit
+  kit, where its crv_response task returns the response-tuning objective
+  against KPP data. A companion veto tier applies CRV veto cut sets to cached
+  coincidences and returns veto inefficiency and deadtime. A CPU version of the
+  faster pulse fit is proposed for Offline.
   Open source (Apache-2.0) in github.com/RobMina/mu2e-crv-fastsim (the crv/
   submodule of github.com/RobMina/mu2e-fastsim), package crvfastsim.reco.
 
@@ -52,8 +55,8 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.2.0'
-last_updated: '2026-10-21'
+version: '1.3.0'
+last_updated: '2026-10-29'
 license:
   spdx_id: Apache-2.0
   name: Apache License 2.0
@@ -74,6 +77,9 @@ relationships:
   - type: runs_on
     target: mu2e-uva-hpc
     target_label: UVA Rivanna/Afton HPC for Mu2e fast simulation and reconstruction
+  - type: runs_on
+    target: mu2e-fnal-eaf
+    target_label: Fermilab Elastic Analysis Facility
 
 io_contract:
   input_modes:
@@ -126,17 +132,31 @@ container: [RobMina/mu2e-crv-fastsim](https://github.com/RobMina/mu2e-crv-fastsi
 - **Coincidences on identical pulses:** identical clusters.
 - **End to end:** compared with the stock chain on the CRV observables of the analysis.
 - **Objective:** the same optimum of the tuning objective.
+- **Stock-equivalent histograms:** the Offline CRV validation and CRV DQM histograms of the fast response, the fast
+  reconstruction and both, run on Geant4 steps, compared with the stock chain on the same events; end to end with
+  the fast simulation's steps.
 
-Passed on existing Monte Carlo and KPP data digis (Polaris A100, Aurora PVC, UVA A100 and B200, CPU); the end-to-end
-and objective checks need the fast simulation's charges.
+Passed on existing Monte Carlo and KPP data digis (Polaris A100, Aurora PVC, UVA A100 and B200, CPU). The objective
+check passed in scans of the response knobs, stock and fast on the same files. The fast response and reconstruction
+agree with stock in the validation and DQM histograms; end-to-end differences come from the fast simulation's steps
+(card `mu2e-crv-fastsim`).
+
+## Veto tier
+
+`crvfastsim.veto` applies CRV veto cut sets (including those of the Mu2e cosmic analysis) to cached stock
+coincidences, vectorised over events, and returns the veto inefficiency and the CRV-induced deadtime. Mu2eBO calls
+it as the `fastsimkit` task `veto_c4`. It evaluates cuts only; it is not a fast end-to-end sensitivity evaluation.
 
 ## Intended use
 
-- The reconstruction tier of the CRV response-tuning loop driven by Bayesian optimization (Mu2eBO). Fast-path points
-  screen; final points are confirmed with the stock chain.
+- The reconstruction tier of the CRV response-tuning loop driven by Bayesian optimization (Mu2eBO, `fastsimkit`
+  task `crv_response`; workflow card `mu2e-crv-response-tuning`). Fast-path points screen; final points are
+  confirmed with the stock chain.
+- CRV veto cut optimisation (veto inefficiency against deadtime) through the veto tier.
 - A faster CPU pulse fit for Offline, upstreamed separately after validation.
 
 ## Limitations
 
-- Extracted configuration only; the veto-efficiency extension to the full detector is in development.
+- The fast reconstruction covers the extracted configuration only. The veto tier runs on cached stock coincidences
+  for Run 1A selections; a fast veto evaluation of the full detector from the fast simulation is in development.
 - Reproduces what the stock digitisation models; effects missing there are added to both paths together.
