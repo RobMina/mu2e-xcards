@@ -4,11 +4,11 @@ xCard:
   version: '0.1'
 
 id: mu2e-tracker-fastreco
-name: Mu2e tracker fast reconstruction (batched GPU straight-line track fit, planned)
+name: Mu2e tracker fast reconstruction (batched GPU straight-line track fit, in development)
 description: >-
-  Planned second stage of the Mu2e fast reconstruction: a batched, vectorised
-  re-implementation in JAX of the extracted-configuration (no magnetic field)
-  straw-tracker reconstruction for GPUs (NVIDIA A100 on ALCF Polaris) and CPU:
+  Second stage of the Mu2e fast reconstruction, in development: a batched,
+  vectorised re-implementation in JAX of the extracted-configuration (no
+  magnetic field) straw-tracker reconstruction for GPUs (NVIDIA A100) and CPU:
   straw hit reconstruction, combo hits, time clustering, a straight-line seed
   and a KinematicLine (KinKal) track fit with drift-ambiguity resolution, as a
   fixed-iteration fit in double precision over many tracks at once. It reads
@@ -17,8 +17,11 @@ description: >-
   EventNtuple, so track-to-CRV residuals come out together with the CRV fast
   reconstruction. Purpose: re-reconstruct each point of the tracker-CRV
   alignment and Monte Carlo response loop without the CPU art chain, with the
-  stock Offline reconstruction as the validation reference. Status: first-draft
-  plan; goals and thresholds are set once the CRV fast reconstruction works.
+  stock Offline reconstruction as the validation reference. Status: every stage
+  is ported, including a KinKal-faithful Kalman fit that runs batched on GPU;
+  time clusters and seeds match the stock chain on identical hits, and the
+  track fit is being compared track by track with the stock KinematicLine fit,
+  not yet within the agreed thresholds.
 
 science:
   - particle-physics
@@ -42,8 +45,8 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.1.0'
-last_updated: '2026-10-16'
+version: '1.2.0'
+last_updated: '2026-10-29'
 license:
   spdx_id: Apache-2.0
   name: Apache License 2.0
@@ -61,6 +64,9 @@ relationships:
   - type: runs_on
     target: mu2e-alcf-polaris
     target_label: ALCF Polaris for Mu2e fast simulation and reconstruction
+  - type: runs_on
+    target: mu2e-fnal-eaf
+    target_label: Fermilab Elastic Analysis Facility
 
 io_contract:
   input_modes:
@@ -79,35 +85,41 @@ io_contract:
 extension:
   kind: model
   architecture: >-
-    Vectorised port (planned) of the extracted Offline tracker chain: straw hit
-    reco, combo hits, time clustering, line seed and a fixed-iteration
-    straight-line Kalman/least-squares fit with masked hit states
+    Vectorised port of the extracted Offline tracker chain: straw hit reco,
+    combo hits, time clustering, a JAX line seed, and fixed-iteration
+    straight-line fits with masked hit states (a KinKal-faithful Kalman fit
+    following the stock fit schedule with straw material, and a
+    least-squares fit)
   framework: JAX (GPU and CPU), Python
   base_model: ''
   training_datasets: []
   metrics: []
 ---
 
-# Mu2e tracker fast reconstruction (planned)
+# Mu2e tracker fast reconstruction (in development)
 
-Stage 2 of the Mu2e Genesis fast reconstruction, after `mu2e-crv-fastreco`. **First-draft plan**: this card states
-the intent and the interface; details follow once the CRV stage works.
+Stage 2 of the Mu2e Genesis fast reconstruction, after `mu2e-crv-fastreco`. Every stage is ported; the track fit's
+validation against the stock chain is in progress.
 
-## Plan in brief
+## Chain
 
-| Stage | Stock reference (Offline) |
-|---|---|
-| straw hit reco | `StrawHitReco` |
-| combo hits | `CombineStrawHits` |
-| time cluster and seed | `SimpleTimeCluster`, `LineFinder` |
-| track fit | `KinematicLineFit` (KinKal) |
-| output columns | EventNtuple `trk`, `trksegs`, `trkhits` |
+| Stage | Fast path | Stock reference (Offline) |
+|---|---|---|
+| straw hit reco | ported | `StrawHitReco` |
+| combo hits | ported | `CombineStrawHits` |
+| time cluster and seed | ported (seed in JAX); identical clusters and seeds on identical hits | `SimpleTimeCluster`, `LineFinder` |
+| track fit | Kalman fit following KinKal's schedule with straw material, batched on GPU; a least-squares fit | `KinematicLineFit` (KinKal) |
+| output columns | EventNtuple names and units | EventNtuple `trk`, `trksegs`, `trkhits` |
 
-- **Fast digitisation:** either a port of the stock straw digitisation or a parametric hit model, to be decided.
+- **Fast digitisation:** a NumPy port of the stock straw digitisation, statistically equivalent to stock, comes with
+  the tracker fast simulation (card `mu2e-tracker-fastsim`); a parametric hit model remains an option.
 - **Validation against the stock chain, matched by truth particle:**
-  - hits and fits on identical inputs;
+  - hits and fits on identical inputs: clusters and seeds pass; per-track fit agreement is close to, but not yet
+    within, the agreed thresholds;
   - track yield, acceptance and residuals end to end;
   - the loop objective.
+- An art dumper exports the stock chain's hits, clusters, seeds and fits (including the stock fit's internal state)
+  for these comparisons.
 
 ## Intended use
 
@@ -116,6 +128,7 @@ configuration.
 
 ## Limitations
 
-- Not started. No-field (straight-line) tracks only; a GPU helix fit is out of scope.
+- In development and not yet validated; no Mu2eBO `fastsimkit` task uses it yet.
+- No-field (straight-line) tracks only; a GPU helix fit is out of scope.
 - KPP data unpacking stays in the stock chain.
 - Code: [RobMina/mu2e-tracker-fastsim](https://github.com/RobMina/mu2e-tracker-fastsim) (Apache-2.0), the `tracker/` submodule of [RobMina/mu2e-fastsim](https://github.com/RobMina/mu2e-fastsim), building on the shared core [RobMina/mu2e-fastsim-core](https://github.com/RobMina/mu2e-fastsim-core).
