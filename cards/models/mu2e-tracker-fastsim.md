@@ -24,7 +24,9 @@ description: >-
   Purpose: resimulate displaced tracker and CRV geometries for the tracker-CRV
   alignment loop and its Monte Carlo response tuning without Geant4. NumPy and
   JAX backends (GPU and CPU). Status: validated level by level against Geant4
-  on the same primaries; the ionisation and track-yield checks are still open.
+  on the same primaries; digis, hits and seeds agree with the stock chain on the
+  same input; the reconstructed track yield meets its threshold only with an
+  opt-in scatter-in model, and the default is still being tuned.
 
 science:
   - particle-physics
@@ -47,12 +49,12 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.2.0'
-last_updated: '2026-10-29'
+version: '1.3.0'
+last_updated: '2026-11-17'
 license:
   spdx_id: Apache-2.0
   name: Apache License 2.0
-  url: https://github.com/RobMina/mu2e-tracker-fastsim
+  url: https://github.com/RobMina/mu2e-fastsim/tree/main/tracker
 relationships:
   - type: based_on
     target: mu2e-crv-fastsim
@@ -132,4 +134,4 @@ loop of the extracted configuration.
 
 - In development and not yet validated; no Mu2eBO `fastsimkit` task uses it yet.
 - Extracted (no field) configuration only; field-on transport is out of scope.
-- Code: [RobMina/mu2e-tracker-fastsim](https://github.com/RobMina/mu2e-tracker-fastsim) (Apache-2.0), the `tracker/` submodule of [RobMina/mu2e-fastsim](https://github.com/RobMina/mu2e-fastsim), building on the shared core [RobMina/mu2e-fastsim-core](https://github.com/RobMina/mu2e-fastsim-core).
+- Code: [RobMina/mu2e-fastsim/tracker](https://github.com/RobMina/mu2e-fastsim/tree/main/tracker) (Apache-2.0), the `tracker/` directory of [RobMina/mu2e-fastsim](https://github.com/RobMina/mu2e-fastsim), building on the shared core [RobMina/mu2e-fastsim/core](https://github.com/RobMina/mu2e-fastsim/tree/main/core).
