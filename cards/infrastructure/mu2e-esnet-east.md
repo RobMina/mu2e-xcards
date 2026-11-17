@@ -82,8 +82,8 @@ card covers Mu2e's workflow on the endpoint, not the endpoint itself.
 
 ## Practical notes
 
-- The job drivers are public in [RobMina/mu2e-fastsim-core](https://github.com/RobMina/mu2e-fastsim-core) (`iri/`),
-  the `core/` submodule of the umbrella repository.
+- The job drivers are public in [RobMina/mu2e-fastsim/core](https://github.com/RobMina/mu2e-fastsim/tree/main/core) (`iri/`),
+  the `core/` directory of the umbrella repository.
 - Pods start within one to two minutes (node scale-up and image pull included).
 - The image's code directory is read-only for the pod user: outputs go to `/tmp` or the job directory.
 - The JAX CUDA plugin needs cuFFT and cuDNN in the image even when the kernels do not use them, or JAX falls back to

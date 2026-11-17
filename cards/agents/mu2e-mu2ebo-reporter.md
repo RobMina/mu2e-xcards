@@ -22,8 +22,9 @@ description: >-
   The model sees only read-only tools and cannot launch, stop or refit anything.
   Works with any OpenAI-compatible endpoint (Fermilab vLLM by default, Fermilab
   LiteLLM, ALCF inference, AmSC Model Access Gateway) and with any agent harness.
-  It is the reporting agent of the Mu2e Genesis phase 1 Run-1 optimization
-  workflow.
+  Mu2eBO ships it as a release kit: each Mu2eBO release pins a reporter tag and
+  installs it on the Mu2e software area with the other kits. It is the reporting
+  agent of the Mu2e Genesis phase 1 Run-1 optimization workflow.
 
 science:
   - particle-physics
@@ -42,17 +43,18 @@ keywords:
   - mcp client
   - agent memory write-back
   - docdb context
+  - release kit
   - genesis mission
   - high energy physics
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.0.0'
-last_updated: '2026-10-15'
+version: '1.1.0'
+last_updated: '2026-11-17'
 license:
   spdx_id: Apache-2.0
   name: Apache License 2.0
-  url: https://github.com/RobMina/mu2ebo-reporter
+  url: https://github.com/Mu2e/mu2ebo-reporter
 relationships:
   - type: part_of
     target: mu2e-run1-optimization
@@ -113,7 +115,7 @@ extension:
 
 # Mu2eBO campaign reporting agent (mu2ebo-reporter)
 
-[RobMina/mu2ebo-reporter](https://github.com/RobMina/mu2ebo-reporter) is the reporting agent of the Mu2e Genesis
+[Mu2e/mu2ebo-reporter](https://github.com/Mu2e/mu2ebo-reporter) is the reporting agent of the Mu2e Genesis
 phase 1 Run-1 optimization workflow (Mu2e-doc-58092, sim/ana task list). It turns a Mu2eBO campaign into a report a
 collaborator can read, and every number in the report can be traced to a tool call.
 
@@ -140,6 +142,13 @@ collaborator can read, and every number in the report can be traced to a tool ca
 
 Inside Mu2eBO each report is a detached job under the campaign's directory, so it outlives the loop that started
 it. `campaign_status` lists the reports, and the `report` tool returns the text.
+
+## Release kit
+
+Mu2eBO's release manifest names the reporter tag each Mu2eBO release runs with, and the release installer puts it
+on the Mu2e software area beside the other kits (analysis server, surrogate, production tools, beamline kit). It runs
+on the engine's own Python environment, so it needs no separate install. A plain clone beside Mu2eBO still works
+for development.
 
 ## Model and harness
 
