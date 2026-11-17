@@ -79,8 +79,8 @@ How the Mu2e experiment uses Aurora at ALCF. This card covers Mu2e's workflow on
 
 ## Practical notes
 
-The job templates are public in [RobMina/mu2e-fastsim-core](https://github.com/RobMina/mu2e-fastsim-core)
-(`aurora/`), the `core/` submodule of [RobMina/mu2e-fastsim](https://github.com/RobMina/mu2e-fastsim).
+The job templates are public in [RobMina/mu2e-fastsim/core](https://github.com/RobMina/mu2e-fastsim/tree/main/core)
+(`aurora/`), the `core/` directory of [RobMina/mu2e-fastsim](https://github.com/RobMina/mu2e-fastsim).
 
 - JAX comes from the upstream `jax[oneapi]` extra, matching the JAX version used elsewhere; its oneAPI runtime
   library must come before the system oneAPI module on the library path.

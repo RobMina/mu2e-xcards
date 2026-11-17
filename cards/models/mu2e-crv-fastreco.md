@@ -26,8 +26,8 @@ description: >-
   against KPP data. A companion veto tier applies CRV veto cut sets to cached
   coincidences and returns veto inefficiency and deadtime. A CPU version of the
   faster pulse fit is proposed for Offline.
-  Open source (Apache-2.0) in github.com/RobMina/mu2e-crv-fastsim (the crv/
-  submodule of github.com/RobMina/mu2e-fastsim), package crvfastsim.reco.
+  Open source (Apache-2.0) in github.com/RobMina/mu2e-fastsim (directory crv/), package
+  crvfastsim.reco.
 
 science:
   - particle-physics
@@ -60,7 +60,7 @@ last_updated: '2026-10-29'
 license:
   spdx_id: Apache-2.0
   name: Apache License 2.0
-  url: https://github.com/RobMina/mu2e-crv-fastsim
+  url: https://github.com/RobMina/mu2e-fastsim/tree/main/crv
 relationships:
   - type: requires
     target: mu2e-crv-fastsim
@@ -113,7 +113,7 @@ extension:
 # Mu2e CRV fast reconstruction
 
 The reconstruction half of the CRV fast chain, paired with `mu2e-crv-fastsim` and living in the same package and
-container: [RobMina/mu2e-crv-fastsim](https://github.com/RobMina/mu2e-crv-fastsim), package `crvfastsim.reco` (Apache-2.0). The stock Offline chain (`CrvRecoPulsesFinder`, `CrvCoincidenceFinder`) stays the reference.
+container: [RobMina/mu2e-fastsim/crv](https://github.com/RobMina/mu2e-fastsim/tree/main/crv), package `crvfastsim.reco` (Apache-2.0). The stock Offline chain (`CrvRecoPulsesFinder`, `CrvCoincidenceFinder`) stays the reference.
 
 ## Chain
 

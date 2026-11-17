@@ -80,13 +80,13 @@ card covers Mu2e's workflow on the cluster, not the cluster itself.
   [RobMina/mu2e-fastsim](https://github.com/RobMina/mu2e-fastsim) repository, one GPU per job with `--nv`.
 - The same physics validation as on ALCF Polaris (photon and SiPM response with the real tables, pulse and
   coincidence reconstruction on KPP cosmic data, reproducibility per seed and between CPU and GPU), on A100 and B200.
-- `fastsimkit`, the Mu2eBO native kit in [RobMina/mu2e-fastsim-core](https://github.com/RobMina/mu2e-fastsim-core)
+- `fastsimkit`, the Mu2eBO native kit in [RobMina/mu2e-fastsim/core](https://github.com/RobMina/mu2e-fastsim/tree/main/core)
   (`mu2efastsim.endpoints`), submits an optimization point as one Slurm job, or (task `chain_point`) as many
   single-GPU jobs whose Mu2e-internal inputs are streamed into each job's memory, and returns the merged metrics.
 
 ## Practical notes
 
-- Job scripts and the endpoint adapter are public in `mu2e-fastsim-core` (`uva/`, `mu2efastsim/endpoints/`).
+- Job scripts and the endpoint adapter are public in `mu2e-fastsim` (`core/uva/`, `core/mu2efastsim/endpoints/`).
 - The JAX CUDA plugin needs cuFFT and cuDNN in the image, or JAX falls back to the CPU without an error.
 - The scratch path is a symbolic link: bind the resolved path into Apptainer.
 - Compute nodes are not reachable by SSH; files go into a running job with `srun --overlap`.

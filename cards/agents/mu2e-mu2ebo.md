@@ -18,13 +18,20 @@ description: >-
   analysis server and adds a row to the study's leaderboard; a Gaussian-process
   surrogate (BoTorch) then proposes the next batch. Agents can list, show and
   check studies, dry-run and launch campaigns with operator approval, follow
-  them and read leaderboards. It is the optimization engine of the Mu2e Genesis
-  phase 1 Run-1 optimization workflow, used for stopping-target and
-  production-target studies. A native fastsimkit kit (on a fork branch, not yet
-  in the main repository) runs the Mu2e Geant4-free GPU fast simulation and
-  reconstruction on HPC and Fermilab GPU endpoints, for CRV response tuning
-  against cosmic data and CRV veto studies. Runs on Fermilab Mu2e machines with
-  the user's grid credentials.
+  them, read leaderboards and get a number-checked campaign report at every loop
+  exit. Multi-objective campaigns can follow up picks along the trade-off curve
+  with full simulation and full analysis. Versioned releases pin every kit (Mu2e
+  analysis server, surrogate, production tools, G4beamline kit, reporting agent)
+  and are installed on the Mu2e software area; a toy kit (Branin and Currin test
+  functions with failure injection) is the reference implementation and test
+  engine. It is the optimization engine of the Mu2e Genesis phase 1 Run-1
+  optimization workflow, used for stopping-target, production-target and
+  conversion-electron chain studies. A native fastsimkit kit (on a fork branch,
+  not yet in the main repository) runs the Mu2e Geant4-free GPU fast simulation
+  on HPC and Fermilab GPU endpoints: stopping-target design points (muon stops,
+  conversion-electron energy deposition, sensitivity), CRV chain points, CRV
+  response tuning against cosmic data and CRV veto studies. Runs on Fermilab
+  Mu2e machines with the user's grid credentials.
 
 science:
   - particle-physics
@@ -43,14 +50,16 @@ keywords:
   - production target
   - leaderboard
   - campaign
+  - pareto front
+  - multi-objective optimization
   - autoresearch
   - mcp server
   - high energy physics
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.3.0'
-last_updated: '2026-10-29'
+version: '1.4.0'
+last_updated: '2026-11-17'
 license:
   spdx_id: NOASSERTION
   name: 'No license declared in the repository'
@@ -74,6 +83,12 @@ relationships:
   - type: invokes
     target: mu2e-crv-fastreco
     target_label: Mu2e CRV fast reconstruction (through the fastsimkit kit)
+  - type: invokes
+    target: mu2e-beam-fastsim
+    target_label: Mu2e muon-beam and conversion-electron fast simulation (through the fastsimkit kit)
+  - type: compatible_with
+    target: mu2e-fastsim-mcp
+    target_label: Mu2e fast simulation MCP server (same kit, for agents)
   - type: invokes
     target: mu2e-mu2ebo-reporter
     target_label: Mu2eBO campaign reporting agent (report at loop exit and on request)
@@ -104,8 +119,10 @@ extension:
     - Follow and stop campaigns (campaign_status, stop_campaign)
     - Read a study's leaderboard, best configurations first (leaderboard)
     - Report on a campaign automatically at loop exit, and on request mid-campaign (start_report, report)
+    - Follow up the best designs along a multi-objective trade-off curve with full simulation and full analysis
     - Run fast Geant4 simulation chains on the Fermilab grid or locally, and G4beamline beamline jobs
     - Run the JAX CRV fast chain, CRV response-tuning points and CRV veto cut evaluations on an HPC or Fermilab GPU endpoint (fastsimkit)
+    - Evaluate stopping-target design points with the GPU muon-beam and conversion-electron fast simulation (fastsimkit)
     - Optimize stopping-target and production-target geometry for muon-to-electron conversion sensitivity
   capabilities:
     streaming: false
@@ -131,16 +148,23 @@ repository for review by its authors.
   (G4beamline for the production target), plus `fastsimkit`, a native kit that runs the JAX fast chain (cards
   `mu2e-crv-fastsim`, `mu2e-crv-fastreco`) on a GPU endpoint: Slurm over SSH at UVA (card `mu2e-uva-hpc`, inputs
   streamed into each job) or the Fermilab Elastic Analysis Facility (card `mu2e-fnal-eaf`, inputs read in place).
-  Its tasks cover throughput and regression checks, fast-chain points on cosmic samples (`chain_point`), CRV
+  Its tasks cover throughput and regression checks, fast-chain points on cosmic samples (`chain_point`, `chain`), CRV
   response tuning against KPP cosmic data (`crv_response`, workflow card `mu2e-crv-response-tuning`), a CRV veto
-  cut evaluation on cached stock coincidences (`veto_c4`) and a prototype muon-beam stopping task (`beam_point`).
-  No tracker task exists yet. `fastsimkit` is on a fork branch (`fastsimkit`) and in the fast-simulation core
-  library; it is not yet merged into Mu2e/Mu2eBO.
+  cut evaluation on cached stock coincidences (`veto_c4`), stopping-target design points with the beam fast
+  simulation (`beam_edep_cpu`, `beam_sob`, `beam_edep`, `beam_point`; card `mu2e-beam-fastsim`) and a tracker
+  point. The kit is in the fast-simulation repository; the Mu2eBO side is on a fork branch and not yet merged into
+  Mu2e/Mu2eBO. The same kit backs the fast-simulation MCP server (card `mu2e-fastsim-mcp`).
+  `toykit` (Branin and Currin test functions with injectable failures) is the reference kit and the engine of the
+  test suite.
 - **Fast simulation**: a study defines a short chain of Geant4 grid steps per candidate (for the stopping target:
   muon beam, conversion-electron stops and beam flash), scored by analyses on the analysis server (muon stop rate,
   energy deposition, approximate sensitivity, beam-flash radiation damage). A full dts -> digi -> reco -> ntuple
   chain (`ce_chain`) is the validation path for selected designs.
 - **Leaderboard**: one TSV per study; each row is one evaluated configuration with its objectives.
+- **Full-simulation follow-up**: after a fast campaign, the best designs, or designs picked along the
+  multi-objective trade-off curve, are re-run with the full simulation and full analysis chain.
+- **Releases**: a release manifest pins the tag of every kit (simulation release, analysis server, surrogate,
+  production tools, G4beamline kit, reporting agent); the release installer puts them on the Mu2e software area.
 - **Optimizer**: BoTorch GP with batch pickers (qNEHVI, qLogNEI, a budget-constrained sensitivity picker, hybrid);
   card `mu2e-mu2ebo-surrogate`.
 
@@ -160,7 +184,8 @@ The study tools submit no jobs and write no leaderboard rows; only campaigns do.
 ## Studies
 
 Studies cover the Run-1A stopping target (sensitivity, with beam-flash radiation damage as a constraint or second
-objective) and the production target on G4beamline. `list_studies` gives the current set, and `leaderboard` the
+objective, including field and absorber variants and full-analysis follow-ups), the conversion-electron chain and
+the production target on G4beamline. `list_studies` gives the current set, and `leaderboard` the
 results; published results are in Mu2e documents (for example Mu2e-doc-58092).
 
 ## Role in the Mu2e Genesis project
