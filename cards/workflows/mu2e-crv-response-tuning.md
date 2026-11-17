@@ -123,7 +123,7 @@ closed-loop campaigns have run on it. The tracker stage follows once its fast pa
 ## Code
 
 The fast simulation and reconstruction: [RobMina/mu2e-fastsim](https://github.com/RobMina/mu2e-fastsim) (Apache-2.0),
-with the CRV part in [RobMina/mu2e-crv-fastsim](https://github.com/RobMina/mu2e-crv-fastsim).
+with the CRV part in [RobMina/mu2e-fastsim/crv](https://github.com/RobMina/mu2e-fastsim/tree/main/crv).
 
 ## Caveats
 

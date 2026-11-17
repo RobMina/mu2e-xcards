@@ -19,9 +19,9 @@ description: >-
   alignment and Monte Carlo response loop without the CPU art chain, with the
   stock Offline reconstruction as the validation reference. Status: every stage
   is ported, including a KinKal-faithful Kalman fit that runs batched on GPU;
-  time clusters and seeds match the stock chain on identical hits, and the
-  track fit is being compared track by track with the stock KinematicLine fit,
-  not yet within the agreed thresholds.
+  time clusters and seeds match the stock chain on identical hits; the track
+  fit agrees with the stock KinematicLine fit in track acceptance but not yet
+  within the agreed threshold, and that comparison is paused.
 
 science:
   - particle-physics
@@ -45,12 +45,12 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.2.0'
-last_updated: '2026-10-29'
+version: '1.3.0'
+last_updated: '2026-11-17'
 license:
   spdx_id: Apache-2.0
   name: Apache License 2.0
-  url: https://github.com/RobMina/mu2e-tracker-fastsim
+  url: https://github.com/RobMina/mu2e-fastsim/tree/main/tracker
 relationships:
   - type: based_on
     target: mu2e-crv-fastreco
@@ -131,4 +131,4 @@ configuration.
 - In development and not yet validated; no Mu2eBO `fastsimkit` task uses it yet.
 - No-field (straight-line) tracks only; a GPU helix fit is out of scope.
 - KPP data unpacking stays in the stock chain.
-- Code: [RobMina/mu2e-tracker-fastsim](https://github.com/RobMina/mu2e-tracker-fastsim) (Apache-2.0), the `tracker/` submodule of [RobMina/mu2e-fastsim](https://github.com/RobMina/mu2e-fastsim), building on the shared core [RobMina/mu2e-fastsim-core](https://github.com/RobMina/mu2e-fastsim-core).
+- Code: [RobMina/mu2e-fastsim/tracker](https://github.com/RobMina/mu2e-fastsim/tree/main/tracker) (Apache-2.0), the `tracker/` directory of [RobMina/mu2e-fastsim](https://github.com/RobMina/mu2e-fastsim), building on the shared core [RobMina/mu2e-fastsim/core](https://github.com/RobMina/mu2e-fastsim/tree/main/core).

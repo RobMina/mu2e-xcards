@@ -21,11 +21,14 @@ description: >-
   A100 GPUs, with a planned differentiable neural photon field (SIREN-style)
   replacing the lookup tables. Geometry comes from the Offline geometry service
   and its GDML export, so a module move is a parameter change. It runs in a
-  container on ALCF Polaris, submitted through the DOE IRI API, and on CPU for
+  container on ALCF Polaris, submitted through the DOE IRI API, on university
+  and Fermilab GPU endpoints (Slurm, Elastic Analysis Facility) and on CPU for
   tests. Purpose: many Monte Carlo variants of CRV geometry and response for
   MC/data agreement, module alignment and Bayesian-optimization response tuning.
-  Status: in development, validated level by level against Geant4. Open source
-  (Apache-2.0) at github.com/RobMina/mu2e-crv-fastsim.
+  Status: validated level by level and end to end against Geant4 and the stock
+  Offline chain on held-out samples (extracted and Run 1A geometry); the Run 2
+  geometry is in development. Open source
+  (Apache-2.0) at github.com/RobMina/mu2e-fastsim, directory crv/.
 
 science:
   - particle-physics
@@ -55,12 +58,12 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.2.0'
-last_updated: '2026-10-21'
+version: '1.3.0'
+last_updated: '2026-11-17'
 license:
   spdx_id: Apache-2.0
   name: Apache License 2.0
-  url: https://github.com/RobMina/mu2e-crv-fastsim
+  url: https://github.com/RobMina/mu2e-fastsim/tree/main/crv
 relationships:
   - type: runs_on
     target: mu2e-alcf-polaris
@@ -108,7 +111,7 @@ extension:
 # Mu2e CRV fast simulation (Geant4-free, GPU-accelerated)
 
 A replacement for the Geant4 stage of the Mu2e extracted-configuration cosmic simulation, built by the Mu2e Genesis
-team. Code: [RobMina/mu2e-crv-fastsim](https://github.com/RobMina/mu2e-crv-fastsim) (Apache-2.0), Python package `crvfastsim` with one CLI. The extracted configuration is the Kinetic Performance Prototype (KPP) setup in the Mu2e hall: tracker and CRV
+team. Code: [RobMina/mu2e-fastsim/crv](https://github.com/RobMina/mu2e-fastsim/tree/main/crv) (Apache-2.0), Python package `crvfastsim` with one CLI. The extracted configuration is the Kinetic Performance Prototype (KPP) setup in the Mu2e hall: tracker and CRV
 modules read out together with no magnetic field.
 
 ## How it works

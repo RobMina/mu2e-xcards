@@ -24,7 +24,10 @@ description: |-
      geometry variants, beamline settings, pipeline stages; Mu2eBO (card mu2e-mu2ebo) checks the study.
   3. Simulation campaigns run: Geant4 fast simulation and full chain (dts, digi, reco, EventNtuple) on FermiGrid or
      HPC (cards mu2e-fermigrid, mu2e-nersc-perlmutter, mu2e-anl-lcrc), G4beamline for the beamline, after a
-     one-event geometry pre-check, driven by Mu2eBO campaigns (card mu2e-mu2ebo).
+     one-event geometry pre-check, driven by Mu2eBO campaigns (card mu2e-mu2ebo). A Geant4-free GPU fast tier
+     (cards mu2e-beam-fastsim, mu2e-crv-fastsim) evaluates design points on HPC GPU and CPU endpoints (cards
+     mu2e-uva-hpc, mu2e-fnal-eaf) through the same kit, from Mu2eBO or directly by an agent through the
+     fast-simulation MCP server (card mu2e-fastsim-mcp); selected designs are confirmed with the full chain.
   4. The analysis interface (card mu2e-analysis-mcp) computes figures of merit for each configuration and adds a
      leaderboard row; inputs and outputs can be located with card mu2e-metacat-mcp.
   5. The surrogate refits on the leaderboard and suggests the next points; the agent explores across qualitatively
@@ -56,14 +59,15 @@ keywords:
   - sensitivity
   - figure of merit
   - campaign report
+  - fast simulation
   - run-1
   - genesis mission
   - high energy physics
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.1.0'
-last_updated: '2026-10-15'
+version: '1.2.0'
+last_updated: '2026-11-17'
 license:
   spdx_id: Apache-2.0
   name: Apache License 2.0
@@ -110,6 +114,18 @@ relationships:
   - type: has_part
     target: mu2e-mu2ebo-reporter
     target_label: Mu2eBO campaign reporting agent
+  - type: has_part
+    target: mu2e-fastsim-mcp
+    target_label: Mu2e fast simulation MCP server
+  - type: has_part
+    target: mu2e-beam-fastsim
+    target_label: Mu2e muon-beam and conversion-electron fast simulation
+  - type: runs_on
+    target: mu2e-uva-hpc
+    target_label: UVA Rivanna/Afton HPC for Mu2e fast simulation and reconstruction
+  - type: runs_on
+    target: mu2e-fnal-eaf
+    target_label: Fermilab Elastic Analysis Facility
   - type: based_on
     target: HEP-KE-Agent-xcard
     target_label: HEP-KE-Agent (AmSC IDA Pilot Knowledge Extraction)
@@ -130,10 +146,10 @@ follows the AmSC IDA Pilot Knowledge Extraction (HEP-KE) framework.
 |---|---|---|---|
 | 1 | State objective and constraints; read prior studies | agent; memory and knowledge-base MCP servers | `mu2e-memory-mcp`, `mu2e-kb-mcp` |
 | 2 | Propose configurations | agent; Mu2eBO GP surrogate (botorch) | `mu2e-mu2ebo-surrogate`, `mu2e-mu2ebo` |
-| 3 | Simulate | Mu2eBO campaign MCP and kits: Geant4 jobs via Mu2e production tools (grid or local), one-event geometry pre-check, G4beamline | `mu2e-mu2ebo` |
+| 3 | Simulate | Mu2eBO campaign MCP and kits: Geant4 jobs via Mu2e production tools (grid or local), one-event geometry pre-check, G4beamline; GPU fast tier through the fastsim kit or its MCP server | `mu2e-mu2ebo`, `mu2e-beam-fastsim`, `mu2e-fastsim-mcp` |
 | 4 | Analyse and score | analysis interface (S/sqrt(B), radiation damage, stops/POT, energy deposition); file catalog | `mu2e-analysis-mcp`, `mu2e-metacat-mcp` |
 | 5 | Refit and choose next points; handle failures | Mu2eBO surrogate MCP; agent | `mu2e-mu2ebo-surrogate` |
-| 6 | Record, report, cite | memory and knowledge-base MCP servers; literature servers; reporting agent | `mu2e-memory-mcp`, `mu2e-kb-mcp`, `mu2e-inspirehep-mcp`, `mu2e-arxiv-mcp` |
+| 6 | Record, report, cite | memory and knowledge-base MCP servers; literature servers; reporting agent | `mu2e-memory-mcp`, `mu2e-kb-mcp`, `mu2e-inspirehep-mcp`, `mu2e-arxiv-mcp`, `mu2e-mu2ebo-reporter` |
 
 Results of the optimization studies are reported in Mu2e documents (for example Mu2e-doc-58092), not in this card.
 

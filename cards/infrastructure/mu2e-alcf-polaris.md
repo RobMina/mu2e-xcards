@@ -79,7 +79,7 @@ itself; the Discovery Engine corpus has no ALCF facility card yet to point to.
 
 ## Practical notes
 
-The job drivers are public in [RobMina/mu2e-fastsim-core](https://github.com/RobMina/mu2e-fastsim-core) (`iri/`), the
+The job drivers are public in [RobMina/mu2e-fastsim/core](https://github.com/RobMina/mu2e-fastsim/tree/main/core) (`iri/`), the
 `core/` submodule of [RobMina/mu2e-fastsim](https://github.com/RobMina/mu2e-fastsim).
 
 
