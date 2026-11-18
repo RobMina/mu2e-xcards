@@ -4,7 +4,7 @@ xCard:
   version: '0.1'
 
 id: mu2e-genesis-benchmarks
-name: Mu2e Genesis AI benchmark suite (optimizer, reporting agent, fast simulation)
+name: Mu2e Genesis AI benchmark suite (optimizer, reporting agent, agentic optimization, fast simulation)
 description: |-
   Benchmark suite of the Mu2e Genesis phase 1 project that measures its AI components in the MLCommons Science
   benchmark ontology (arXiv:2511.05614: problem specification, dataset, metrics, reference solution,
@@ -15,8 +15,9 @@ description: |-
   facts present, every number supported by the tool outputs, no value moved onto the wrong row; tokens and latency
   on zero-cost language models), and the Geant4-free GPU fast simulation (the three metrics of a code revision:
   validity against stock simulation in the Offline validation histograms, throughput against a stock grid slot, and
-  cost per event). An agentic optimization case (a natural-language objective driven to a closed campaign, scored
-  from the agent's decision traces) is planned. Submissions are results, never code: the scorers re-evaluate what
+  cost per event), and an agentic optimization layer over Mu2eBO (a one-line natural-language scenario driven to a
+  closed campaign within budgets and approval gates, scored from the run's own files: scenario levers, re-evaluated
+  points, verdict and trace completeness). Submissions are results, never code: the scorers re-evaluate what
   they can (test functions from the submitted points, numbers against the frozen facts), so a submission cannot
   claim a better value than it reached. Public cases are synthetic; cases built from Mu2e simulation or campaigns
   are scored privately.
@@ -53,7 +54,7 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.0.0'
+version: '1.1.0'
 last_updated: '2026-11-17'
 license:
   spdx_id: Apache-2.0
@@ -94,11 +95,14 @@ fast-simulation benchmark lives in the public fast-simulation repository
 | Optimizer sample efficiency | how fast a batch optimizer closes the gap to the optimum (simple regret or hypervolume) under a fixed budget and batch size, on Branin, Branin-Currin and a held-out Hartmann-6 | the evaluated points, per round | the test functions, re-evaluated at the submitted points |
 | Grounded campaign reports | whether a report states the campaign's key facts, supports every number with a tool output, and keeps each value on its own row; tokens and latency | one report per synthetic campaign, plus token usage | the frozen facts and gold claims; the reporting agent's own number check, vendored unchanged |
 | Fast-simulation revision | validity in the Offline validation histograms against stock (same events, shapes, paired shards, yields), both float precisions; throughput against a stock grid slot; cost per event (private) | binned histograms and a timing file | hidden stock reference histograms and their reseeded-stock floor |
-| Agentic optimization (planned) | task success on natural-language objectives and constraint scenarios, steps, tokens, cost, trace completeness | the agent's run directory and its campaign records | the re-evaluated campaign points and the decision trace |
+| Agentic optimization | task success on natural-language scenarios (levers set, constraints met, best point named, correct verdict on an infeasible scenario, no gate crossed), regret against the constrained optimum, trace completeness; ranked by task success x trace completeness x regret score; tokens, guard hits | the agent's run directory and the study boards its campaigns wrote, per scenario and repeat | the re-evaluated board points, the study the scenario must be carried by, and the decision trace with its replay files |
 
 ## Access and limitations
 
-- The bundles are prepared for the Genesis Benchmarks site but not uploaded; results are kept by the project.
+- The bundles are built and validated locally; no upload to the Genesis Benchmarks site is planned. Results are
+  kept by the project.
+- The agentic case ranks on task success x trace completeness x regret score. Task success x trace completeness
+  alone saturates on the toy scenarios: random points with the right levers tie the best possible run.
 - Mu2eBO repeats from an empty board are identical (its picks are seeded by index), so the optimizer benchmark does
   not measure Mu2eBO's run-to-run spread.
 - Results that involve Mu2e simulation or campaigns are Mu2e results and are not published through this card.
