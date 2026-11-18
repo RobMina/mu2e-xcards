@@ -58,13 +58,16 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.4.0'
+version: '1.4.1'
 last_updated: '2026-11-17'
 license:
   spdx_id: NOASSERTION
   name: 'No license declared in the repository'
   url: https://github.com/Mu2e/Mu2eBO
 relationships:
+  - type: validated_by
+    target: mu2e-genesis-benchmarks
+    target_label: Mu2e Genesis AI benchmark suite
   - type: has_part
     target: mu2e-mu2ebo-surrogate
     target_label: Mu2eBO GP surrogate MCP server

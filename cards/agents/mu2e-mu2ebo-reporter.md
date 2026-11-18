@@ -49,13 +49,16 @@ keywords:
 sensitivity: reviewed
 developed_by:
   - Mu2e Genesis team
-version: '1.1.0'
+version: '1.1.1'
 last_updated: '2026-11-17'
 license:
   spdx_id: Apache-2.0
   name: Apache License 2.0
   url: https://github.com/Mu2e/mu2ebo-reporter
 relationships:
+  - type: validated_by
+    target: mu2e-genesis-benchmarks
+    target_label: Mu2e Genesis AI benchmark suite
   - type: part_of
     target: mu2e-run1-optimization
     target_label: Mu2e Agentic Run-1 Experiment Optimization Workflow
