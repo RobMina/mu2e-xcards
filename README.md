@@ -8,6 +8,14 @@ phase 1 project ("Expedited Discovery by Leveraging Agentic Workflows for the Mu
 This repository holds only the card sources. Each card file is the source of truth; registering a card copies it
 into a registry, which assigns its own id.
 
+## Related: experiment-agnostic cards
+
+Shared HEP packages (cryjax, hep-simlib, hep-simbench, hep-endpoints, planned scint-fibre / nova-fastsim /
+ldmgen) live in **[RobMina/hep-xcards](https://github.com/RobMina/hep-xcards)**, which embeds this repository as a
+submodule. Do not add `mu2e-` prefixed cards for those packages here. Publish process:
+ai-config wiki `mu2e/wiki/genesis/xcards-discovery-publish.md`.
+
+
 ## Layout
 
 | Directory | `xCard.card_type` | Registry endpoint |
