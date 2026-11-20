@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Check cards before registering: offline schema + Mu2e-convention validation, then the template-diff check.
 #   scripts/check.sh [CARD.md ...]          (default: every card)
-# PYTHON: a python with pyyaml + jsonschema (environment.yml / requirements.txt). DISCOVERY_LOCAL_DIR: optional,
-# enables discovery-local's check_card.py (defaults to ../../discovery-local when this repo sits in ai-config/mu2e).
+# PYTHON: a python with pyyaml + jsonschema (environment.yml / requirements.txt).
+# DISCOVERY_LOCAL_DIR: optional path to a discovery-local checkout (enables templates/check_card.py).
+# When unset, looks for ../../discovery-local relative to this submodule (sibling layout only).
 set -euo pipefail
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 py="${PYTHON:-python3}"
