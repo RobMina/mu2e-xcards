@@ -12,8 +12,8 @@ into a registry, which assigns its own id.
 
 Shared HEP packages (cryjax, hep-simlib, hep-simbench, hep-endpoints, planned scint-fibre / nova-fastsim /
 ldmgen) live in **[RobMina/hep-xcards](https://github.com/RobMina/hep-xcards)**, which embeds this repository as a
-submodule. Do not add `mu2e-` prefixed cards for those packages here. Publish process:
-private workspace wiki `<private-mu2e-wiki>/genesis/xcards-discovery-publish`.
+submodule. Do not add `mu2e-` prefixed cards for those packages here. Maintainer
+publish steps live in the private Mu2e workspace wiki (Genesis / xcards publish page).
 
 
 ## Layout
